@@ -39,3 +39,28 @@ body { --ink: var(--text); --line: var(--border); --radius: 14px; }
   .side { max-height: none; }
 }
 .toggle input { display: inline-block; width: auto; margin: 0 8px 0 0; vertical-align: middle; }
+
+/* ---- date bar, legend, conditions ---- */
+.datebar { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; margin-bottom: 24px; }
+.datebar-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.datebar-top label { font-weight: 600; }
+.datebar input[type=date] { padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; }
+.datebar input[type=range] { width: 100%; margin: 14px 0 2px; accent-color: var(--accent); }
+.slider-ends { display: flex; justify-content: space-between; gap: 8px; }
+.season { margin: 10px 0 0; font-size: .92rem; }
+.chip { border: 1px solid var(--border); background: var(--bg); color: var(--text); padding: 6px 14px; border-radius: 999px; cursor: pointer; font: 500 .85rem "DM Sans", sans-serif; }
+.chip:hover { border-color: var(--text); }
+.summary { margin: 0 0 10px; font-size: .92rem; }
+.legend { list-style: none; margin: 0 0 4px; padding: 0; font-size: .82rem; }
+.legend li { display: flex; align-items: center; gap: 8px; margin: 4px 0; color: var(--muted); }
+.dot { width: 12px; height: 12px; border-radius: 50%; flex: none; border: 2px solid #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / .25); }
+.pin.restricted { box-shadow: 0 0 0 3px #b3402a, 0 1px 4px rgb(0 0 0 / .5); }
+.place-list .row { display: flex; align-items: center; gap: 8px; }
+.place-list .state { font-size: .78rem; color: var(--muted); }
+.facts { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 8px 0; font-size: .85rem; }
+.facts dt { color: #6b7a83; } .facts dd { margin: 0; font-weight: 500; }
+.leaflet-popup-content .sub { font-size: .72rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: #6b7a83; margin: 10px 0 0; }
+.leaflet-popup-content .cond { display: flex; align-items: center; gap: 8px; font-weight: 600; margin: 6px 0 2px; }
+.leaflet-popup-content .small { font-size: .8rem; color: #6b7a83; margin: 6px 0 0; }
+.leaflet-popup-content { min-width: 230px; }
+.datebar input[type=date] { width: auto; }

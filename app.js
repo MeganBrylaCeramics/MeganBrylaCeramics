@@ -43,6 +43,7 @@ async function init() {
     applySiteText(store.text);
     try { localStorage.setItem("siteText", JSON.stringify(store.text)); } catch {}
   }
+  document.body.classList.toggle("shop-closed", !store.shopOpen);
   const pieces = store.pieces || [];
   store.products = pieces.filter((p) => p.inShop && p.price > 0).map((p) => ({ ...p, name: p.title }));
   store.portfolio = pieces.filter((p) => p.inPortfolio);
@@ -135,7 +136,8 @@ function route() {
   if (name === "visit") name = "payments"; // old link
   const toWork = name === "portfolio";
   if (toWork) name = "home";
-  const view = VIEWS.includes(name) ? name : "home";
+  let view = VIEWS.includes(name) ? name : "home";
+  if (!store.shopOpen && (view === "shop" || view === "payments")) view = "home"; // shop is switched off in the admin
   document.querySelectorAll(".view").forEach((v) => (v.hidden = v.dataset.view !== view));
   document.querySelectorAll("[data-nav]").forEach((a) => {
     a.classList.toggle("active", a.dataset.nav === view);

@@ -474,3 +474,8 @@ input:focus, textarea:focus, .btn:focus-visible, .cart-btn:focus-visible { outli
 .show-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; padding-bottom: 12px; margin-bottom: 20px; border-bottom: 1px solid var(--border); }
 .show-head h3 { margin: 0; font-size: clamp(1.3rem, 2.6vw, 1.6rem); }
 .cv-block + .cv-block { margin-top: clamp(32px, 5vw, 48px); }
+
+/* Shop and payments are hidden while "Shop is open" is off in the admin. */
+.shop-closed [data-nav="shop"], .shop-closed [data-nav="payments"], .shop-closed .cart-btn,
+.shop-closed .available, .shop-closed .footer-nav a[href="#/shop"], .shop-closed .footer-nav a[href="#/payments"],
+.shop-closed .scrim, .shop-closed #cart { display: none !important; }

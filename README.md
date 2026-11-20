@@ -20,6 +20,12 @@ Click **Publish**. The live site updates in about a minute.
 2. Limit it to the `MeganBrylaCeramics` repository with **Contents: Read and write**.
 3. Open `/admin/`, choose **Sign in with token**, and paste it. Keep it in a password manager.
 
+## Turning the shop back on
+The Shop, Payments and Cart are hidden for now. When you're ready, open `/admin/`, tick **Shop is open**, and publish. Everything below still applies.
+
+## Clay soil map
+`clay-map.html` shows New York clay places coloured by how workable the clay is on the chosen date (past 3 months to 2 weeks ahead), using live soil temperature, soil moisture, snow and rain from Open-Meteo. Tapping any spot shows USDA soil survey data (clay, silt and sand %, drainage). The ratings are a rough guide, not a field check. Add or edit places in `/admin/` under *Clay map places*.
+
 ## Taking payments (all free to run)
 | Method | What happens |
 |---|---|
