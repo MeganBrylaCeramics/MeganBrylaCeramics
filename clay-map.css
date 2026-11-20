@@ -91,3 +91,6 @@ body { --ink: var(--text); --line: var(--border); --radius: 14px; }
 @media (min-width: 861px) { .side { position: sticky; top: 76px; max-height: calc(100vh - 100px); } }
 #map { height: 720px; }
 @media (max-width: 860px) { #map { height: 70vh; } }
+.data-status { font-size: .82rem; padding: 8px 10px; border-radius: 8px; margin: 0 0 8px; line-height: 1.4; }
+.data-status.live { background: var(--green-soft); color: var(--green-soft-ink); }
+.data-status.est { background: #fbf0d6; color: #6b4d0f; }

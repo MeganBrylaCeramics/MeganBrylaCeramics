@@ -44,12 +44,24 @@
   const map = L.map("map", { maxBounds: NY.pad(0.4), minZoom: 6 }).fitBounds(NY);
   L.control.scale({ imperial: true }).addTo(map);
   const base = {
-    osm: L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" }),
+    terrain: L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", { maxZoom: 17, subdomains: "abc", attribution: "© OpenStreetMap contributors, SRTM | © OpenTopoMap (CC-BY-SA)" }),
     topo: L.tileLayer("https://basemap.nationalmap.gov/arcgis/rest/services/USGSTopo/MapServer/tile/{z}/{y}/{x}", { maxZoom: 16, attribution: "USGS The National Map" }),
+    osm: L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap contributors" }),
     sat: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", { maxZoom: 18, attribution: "Esri, Maxar, Earthstar" }),
   };
-  let current = base.osm.addTo(map);
-  $("#basemap").addEventListener("change", (e) => { map.removeLayer(current); current = base[e.target.value].addTo(map); current.bringToBack(); });
+  let current = base.terrain.addTo(map), baseErrors = 0;
+  function useBase(k) { baseErrors = 0; map.removeLayer(current); current = base[k].addTo(map); current.bringToBack(); $("#basemap").value = k; }
+  $("#basemap").addEventListener("change", (e) => useBase(e.target.value));
+  // If a base map's server can't be reached, switch to the street map so the page never shows a blank map.
+  Object.entries(base).forEach(([k, layer]) => layer.on("tileerror", () => {
+    if (current === layer && k !== "osm" && ++baseErrors === 6) { useBase("osm"); $("#basemap-note").textContent = "That base map didn't load, so I switched to the street map."; }
+  }));
+  const streams = L.tileLayer("https://basemap.nationalmap.gov/arcgis/rest/services/USGSHydroCached/MapServer/tile/{z}/{y}/{x}", { maxZoom: 16, opacity: 0.9, attribution: "USGS National Hydrography" });
+  let streamErrors = 0;
+  streams.on("tileerror", () => { if (++streamErrors === 6) { $("#streams-status").className = "status err"; $("#streams-status").textContent = "unavailable right now"; } });
+  $("#lyr-streams").addEventListener("change", (e) => {
+    if (e.target.checked) { streamErrors = 0; $("#streams-status").textContent = ""; streams.addTo(map); } else map.removeLayer(streams);
+  });
   map.createPane("counties"); map.getPane("counties").style.zIndex = 250;
 
   // ---------- Conditions: how workable is the clay on a given day? ----------
@@ -77,6 +89,65 @@
     if (soilT == null && soilM == null) key = "nodata";
     return { key, metrics: m };
   }
+
+  // ---------- My own model: typical conditions for a place and date ----------
+  // Used whenever live weather isn't available. Climate comes from latitude, region and day of year:
+  // air temperature follows a yearly curve, soil temperature lags it, and wetness peaks in the March-April
+  // thaw and bottoms out in late summer.
+  const inBox = (lat, lng, a, b, c, d) => lat >= a && lat <= b && lng >= c && lng <= d;
+  function climate(lat, lng) {
+    let Tm = 55.5 - 3.0 * (lat - 40.7), A = 24;               // yearly mean and swing, °F
+    const coastal = lat < 41.3 && lng > -74.3;
+    if (coastal) { A = 21; Tm += 0.5; }
+    const mountains = inBox(lat, lng, 43.3, 44.9, -75.5, -73.4) || inBox(lat, lng, 41.9, 42.4, -75.0, -74.0);
+    if (mountains) Tm -= 3;
+    const snowBelt = mountains || inBox(lat, lng, 43.3, 44.1, -76.2, -75.0) || inBox(lat, lng, 42.2, 42.9, -79.3, -78.5);
+    return { Tm, A, snowBelt };
+  }
+  const doyOf = (day) => { const d = parse(day); return Math.round((d - new Date(d.getFullYear(), 0, 0)) / 864e5); };
+  function modelConditions(lat, lng, day) {
+    const doy = doyOf(day), { Tm, A, snowBelt } = climate(lat, lng), r = 2 * Math.PI / 365;
+    const air = Tm - A * Math.cos(r * (doy - 20));
+    const soil = Tm - 0.9 * A * Math.cos(r * (doy - 27));
+    const wet = 0.52 + 0.26 * Math.cos(r * (doy - 75)) + (snowBelt ? 0.04 : 0);
+    const snowy = air < (snowBelt ? 32 : 28);
+    let key = "good";
+    if (soil <= 34 || snowy) key = "frozen"; else if (wet > 0.68) key = "wet"; else if (wet < 0.28) key = "dry";
+    const C = (f) => (f - 32) * 5 / 9;
+    return { key, source: "model", metrics: { soilT: C(soil), wetIdx: wet, tmax: C(air + 8), tmin: C(air - 8), snow: snowy ? 0.05 : 0 } };
+  }
+  // Live data when we have it for that day, otherwise the model.
+  function condFor(e, day) {
+    const live = conditions(e.w, day);
+    return live.key !== "nodata" ? { ...live, source: "live" } : modelConditions(e.lat, e.lng, day);
+  }
+
+  // Rough clay potential by county (0 to 3), from general glacial geology. My own estimate, not survey data.
+  const GEO = {
+    hudson:   { pot: 3, note: "Glacial Lake Albany and Hudson River clay beds, the old brickmaking belt." },
+    hudson2:  { pot: 2, note: "Some glacial lake clay along the Hudson and its valleys." },
+    champ:    { pot: 3, note: "Champlain Sea and glacial lake clays in the valley lowlands." },
+    champ2:   { pot: 2, note: "Clay in the valley lowlands; mountains are mostly thin till and rock." },
+    ontario:  { pot: 3, note: "Glacial lake plain clays near the Great Lakes." },
+    plain:    { pot: 2, note: "Lake-bed and plain clays in the valleys and lowlands." },
+    till:     { pot: 1, note: "Mostly glacial till and hills. Clay is mainly in valley bottoms and stream banks." },
+    rock:     { pot: 0, note: "Mostly bedrock and thin soil. Little clay." },
+    li:       { pot: 2, note: "Cretaceous clay beds under glacial deposits, often deep or built over." },
+    urban:    { pot: 1, note: "Mostly built over. Clay is hard to reach." },
+  };
+  const COUNTY_GEO = {
+    Albany: "hudson", Rensselaer: "hudson", Columbia: "hudson", Greene: "hudson", Ulster: "hudson", Dutchess: "hudson", Rockland: "hudson", Washington: "hudson",
+    Orange: "hudson2", Westchester: "hudson2", Saratoga: "hudson2", Schenectady: "hudson2", Putnam: "till",
+    Clinton: "champ", "St. Lawrence": "champ", Essex: "champ2", Franklin: "champ2", Jefferson: "plain", Lewis: "till", Warren: "till", Fulton: "till", Hamilton: "rock",
+    Niagara: "ontario", Monroe: "ontario", Wayne: "ontario",
+    Orleans: "plain", Oswego: "plain", Cayuga: "plain", Genesee: "plain", Erie: "plain", Chautauqua: "plain", Livingston: "plain", Ontario: "plain", Seneca: "plain", Yates: "plain",
+    Onondaga: "plain", Oneida: "plain", Montgomery: "plain", Tompkins: "plain",
+    Madison: "till", Herkimer: "till", Wyoming: "till", Allegany: "till", Cattaraugus: "till", Steuben: "till", Chemung: "till", Schuyler: "till", Tioga: "till", Broome: "till",
+    Chenango: "till", Cortland: "till", Otsego: "till", Delaware: "till", Sullivan: "till", Schoharie: "till",
+    Suffolk: "li", Nassau: "li", Richmond: "li", Queens: "urban", Kings: "urban", Bronx: "urban", "New York": "urban",
+  };
+  const POT_LABEL = ["Very low", "Low", "Moderate", "High"];
+  const geoOf = (county) => (county && GEO[COUNTY_GEO[county]]) || null;
 
   // range: { past, future } for the whole window, or { start, end } for one date (plus two days of rain history).
   async function loadWeather(points, range) {
@@ -188,13 +259,18 @@
   const kindText = (e) => e.type === "pick" ? "Selected spot" : e.type === "saved" ? "Saved spot" : "";
 
   function popupHtml(e) {
-    const c = conditions(e.w, date), st = STATES[c.key], m = c.metrics;
-    const metrics = c.key === "nodata" ? "" : `<dl class="facts">
+    const c = condFor(e, date), st = STATES[c.key], m = c.metrics, est = c.source === "model";
+    const wetWord = (w) => (w > 0.68 ? "High" : w > 0.45 ? "Moderate" : "Low");
+    const metrics = est ? `<dl class="facts">
+      <dt>Soil temp (est.)</dt><dd>${F(m.soilT).toFixed(0)}°F</dd>
+      <dt>Soil wetness (est.)</dt><dd>${wetWord(m.wetIdx)}</dd>
+      <dt>Air high / low (typical)</dt><dd>${F(m.tmax).toFixed(0)}° / ${F(m.tmin).toFixed(0)}°F</dd></dl>` : `<dl class="facts">
       ${m.soilT != null ? `<dt>Soil temp</dt><dd>${F(m.soilT).toFixed(0)}°F</dd>` : ""}
       ${m.soilM != null ? `<dt>Soil moisture</dt><dd>${Math.round(m.soilM * 100)}%</dd>` : ""}
       ${m.snow ? `<dt>Snow depth</dt><dd>${(m.snow * 39.37).toFixed(1)} in</dd>` : ""}
       ${m.rain3 != null ? `<dt>Rain, last 3 days</dt><dd>${inch(m.rain3).toFixed(2)} in</dd>` : ""}
       ${m.tmax != null ? `<dt>Air high / low</dt><dd>${F(m.tmax).toFixed(0)}° / ${F(m.tmin).toFixed(0)}°F</dd>` : ""}</dl>`;
+    const geo = geoOf(e.county || countyAt(e.lat, e.lng));
     const head = e.type === "place"
       ? `<span class="tag ${e.kind === "restricted" ? "restricted" : ""}">${esc(accessLabel[e.access] || "Permission needed")}</span><h3>${esc(e.name)}</h3><div>${esc(e.county)} County</div><p>${esc(e.notes)}</p>`
       : `<span class="tag">${kindText(e)}</span><h3>${esc(e.name || (e.county ? e.county + " County spot" : "Selected spot"))}</h3><div>${e.county ? esc(e.county) + " County · " : ""}${e.lat.toFixed(4)}, ${e.lng.toFixed(4)}</div>`;
@@ -207,6 +283,8 @@
       <p class="sub">Conditions on ${esc(pretty(date))}</p>
       <div class="cond"><span class="dot" style="background:${st.color}"></span>${esc(st.label)}</div>
       <div class="small">${esc(st.help)}</div>${metrics}
+      <p class="small">${est ? "Estimate: typical conditions for this date at this location. It can't know this year's actual weather." : "Live weather data."}</p>
+      ${geo ? `<p class="sub">Regional clay potential</p><div class="cond">${POT_LABEL[geo.pot]} <span class="muted">(my estimate)</span></div><div class="small">${esc(geo.note)}</div>` : ""}
       <p class="sub">Soil survey (USDA)</p>${soilHtml(e.soil)}${actions}`;
   }
   async function fillSoil(e) {
@@ -247,7 +325,7 @@
     const s = { name: name.trim().slice(0, 60), lat: e.lat, lng: e.lng, county: e.county, w: e.w, soil: e.soil, kind: "region", type: "saved" };
     saved.push(s); addMarker(s, savedLayer); storeSaved();
     if (picked) { map.removeLayer(picked.marker); picked = null; }
-    render(); s.marker.setIcon(pinIcon(s, conditions(s.w, date).key)); s.marker.openPopup();
+    render(); s.marker.setIcon(pinIcon(s, condFor(s, date).key)); s.marker.openPopup();
   }
   function removeSpot(e) {
     const i = saved.indexOf(e); if (i < 0) return;
@@ -261,15 +339,15 @@
     if (!inNY(lat, lng)) { $("#summary").textContent = "That spot is outside New York State."; return; }
     if (picked) map.removeLayer(picked.marker);
     picked = { lat, lng, type: "pick", kind: "region", name: "", county: countyAt(lat, lng), w: null, soil: null };
-    picked.marker = L.marker([lat, lng], { icon: pinIcon(picked, "nodata") }).addTo(map);
+    picked.marker = L.marker([lat, lng], { icon: pinIcon(picked, condFor(picked, date).key) }).addTo(map);
     picked.marker.bindPopup(() => popupHtml(picked));
     picked.marker.on("popupopen", () => { select(picked); fillSoil(picked); });
     if (open) picked.marker.openPopup();
     const mine = picked;
     try { [mine.w] = await loadWeather([mine], { past: PAST, future: FUTURE }); } catch (err) { mine.w = null; }
     if (picked !== mine) return;
-    mine.marker.setIcon(pinIcon(mine, conditions(mine.w, date).key));
-    refreshPopup(mine); drawSelection();
+    mine.marker.setIcon(pinIcon(mine, condFor(mine, date).key));
+    refreshPopup(mine); drawSelection(); updateStatus();
   }
   map.on("click", (ev) => pick(ev.latlng.lat, ev.latlng.lng));
 
@@ -281,19 +359,18 @@
     if (!e) { $("#sel-title").textContent = "Selected spot"; return; }
     $("#sel-title").textContent = e.name || (e.county ? e.county + " County spot" : "Selected spot");
     const bars = ALL_DAYS.map((d, i) => {
-      const k = conditions(e.w, d).key;
+      const k = condFor(e, d).key;
       return `<rect data-d="${d}" x="${i * 4}" y="0" width="4" height="40" fill="${STATES[k].color}"><title>${esc(weekday(d))}: ${esc(STATES[k].label)}</title></rect>`;
     }).join("");
     const xi = ALL_DAYS.indexOf(date), xt = ALL_DAYS.indexOf(TODAY);
     $("#timeline").innerHTML = bars +
       `<rect x="${xt * 4 + 1.5}" y="0" width="1" height="44" fill="#1d2b33" opacity=".35" pointer-events="none"/>` +
       `<rect x="${xi * 4 - 1}" y="0" width="6" height="44" fill="none" stroke="#1d2b33" stroke-width="1.5" pointer-events="none"/>`;
-    const next = nextGood(e, date), good14 = ALL_DAYS.filter((d) => d >= date && d <= iso(addDays(parse(date), 13)) && conditions(e.w, d).key === "good").length;
-    $("#sel-next").innerHTML = !e.w ? "Loading conditions…"
-      : next ? `Next good digging day: <strong>${esc(weekday(next))}</strong>${next === date ? " (that's the selected date)" : ""}. ${good14} good day${good14 === 1 ? "" : "s"} in the following two weeks.`
+    const next = nextGood(e, date), good14 = ALL_DAYS.filter((d) => d >= date && d <= iso(addDays(parse(date), 13)) && condFor(e, d).key === "good").length;
+    $("#sel-next").innerHTML = next ? `Next good digging day: <strong>${esc(weekday(next))}</strong>${next === date ? " (that's the selected date)" : ""}. ${good14} good day${good14 === 1 ? "" : "s"} in the following two weeks.`
       : "No good digging day from this date through the forecast.";
   }
-  function nextGood(e, from) { return ALL_DAYS.find((d) => d >= from && conditions(e.w, d).key === "good") || null; }
+  function nextGood(e, from) { return ALL_DAYS.find((d) => d >= from && condFor(e, d).key === "good") || null; }
   $("#timeline").addEventListener("click", (ev) => { const r = ev.target.closest("rect[data-d]"); if (r) setDate(r.dataset.d); });
   $("#nextgood").addEventListener("click", () => {
     const e = sel || ents[0]; if (!e) return;
@@ -304,13 +381,24 @@
   // ---------- County map: conditions across the whole state ----------
   let countyLayer = null, countyW = {}, countyToken = 0;
   const countyFeats = COUNTIES ? COUNTIES.features.map((f) => ({ f, ...centroid(f) })) : [];
+  let mode = "cond"; // cond = digging conditions, clay = clay potential, best = best bets
+  const POT_COLORS = ["#efe6d8", "#dcc79c", "#c19a5b", "#8f5a2b"];
+  const WORK = { good: 1, dry: 0.45, wet: 0.35, frozen: 0, nodata: 0 };
+  const BEST_BINS = [[0, "#cfd6da", "Not now"], [0.7, "#bfe0c8", "Fair"], [1.4, "#86c49b", "Good"], [2.2, "#4fa876", "Very good"], [99, "#2c7f52", "Best"]];
+  const countyCond = (c) => condFor({ lat: c.lat, lng: c.lng, w: countyW[date] && countyW[date][c.f.id] }, date);
+  const countyPot = (c) => (geoOf(c.f.properties.name) || { pot: 0 }).pot;
+  const bestScore = (c) => countyPot(c) * WORK[countyCond(c).key];
+  const binOf = (sc) => (sc <= 0 ? 0 : sc <= 0.7 ? 1 : sc <= 1.4 ? 2 : sc <= 2.2 ? 3 : 4);
   function paintCounties() {
     if (!countyLayer) return;
     countyLayer.eachLayer((l) => {
-      const c = l.feature._c, w = countyW[date] && countyW[date][c.f.id];
-      const k = conditions(w, date).key; l.feature._k = k;
-      l.setStyle({ fillColor: STATES[k].color, fillOpacity: k === "nodata" ? 0.08 : 0.42, color: "#ffffff", weight: 1, opacity: 0.7 });
-      l.setTooltipContent(`<span class="county-tip"><strong>${esc(c.f.properties.name)} County</strong><br>${esc(STATES[k].label)}</span>`);
+      const c = l.feature._c, name = c.f.properties.name, cc = countyCond(c), pot = countyPot(c);
+      let fill, tip;
+      if (mode === "clay") { fill = POT_COLORS[pot]; tip = `${POT_LABEL[pot]} clay potential (my estimate)`; }
+      else if (mode === "best") { const b = binOf(bestScore(c)); fill = BEST_BINS[b][1]; tip = `${BEST_BINS[b][2]}: ${STATES[cc.key].label.toLowerCase()}, ${POT_LABEL[pot].toLowerCase()} clay potential`; }
+      else { fill = STATES[cc.key].color; tip = STATES[cc.key].label + (cc.source === "model" ? " (typical)" : ""); }
+      l.setStyle({ fillColor: fill, fillOpacity: 0.5, color: "#ffffff", weight: 1, opacity: 0.8 });
+      l.setTooltipContent(`<span class="county-tip"><strong>${esc(name)} County</strong><br>${esc(tip)}</span>`);
     });
   }
   if (COUNTIES) {
@@ -323,15 +411,16 @@
   async function loadCounties() {
     if (!countyLayer || !$("#lyr-counties").checked) return;
     const st = $("#county-status"), d = date;
-    if (countyW[d]) { paintCounties(); return; }
+    if (countyW[d]) { paintCounties(); renderSummary(); return; }
     const token = ++countyToken; st.className = "status"; st.textContent = "loading…";
     try {
       const res = await loadWeather(countyFeats, { start: iso(addDays(parse(d), -2)), end: d });
       const map_ = {}; countyFeats.forEach((c, i) => (map_[c.f.id] = res[i]));
       countyW[d] = map_;
-      if (token === countyToken) { st.textContent = ""; paintCounties(); renderSummary(); }
+      if (token === countyToken) { st.textContent = ""; paintCounties(); renderSummary(); updateStatus(); }
     } catch (err) {
-      if (token === countyToken) { st.className = "status err"; st.textContent = "unavailable right now"; }
+      if (token === countyToken) { st.className = "status"; st.textContent = "using estimates"; }
+      updateStatus();
     }
   }
   let countyTimer;
@@ -381,18 +470,39 @@
     "Early winter: freezing nights and snow end the digging season.",
   ];
   function renderSummary() {
-    const counts = {}; let total = 0;
-    const cw = countyW[date];
-    if (cw && $("#lyr-counties").checked) {
-      countyFeats.forEach((c) => { const k = conditions(cw[c.f.id], date).key; counts[k] = (counts[k] || 0) + 1; total++; });
-      const g = counts.good || 0;
-      $("#summary").textContent = `${g} of ${total} counties look good for digging${everything().length ? `; ${everything().filter((e) => e.cond === "good").length} of ${everything().length} of your places do` : ""}.`;
+    const hasCounties = countyLayer && $("#lyr-counties").checked;
+    const lines = (items) => items.map(([color, label, n]) => `<li><span class="dot" style="background:${color}"></span>${esc(label)}${n ? ` (${n})` : ""}</li>`).join("");
+    if (hasCounties && mode === "clay") {
+      const n = [0, 0, 0, 0]; countyFeats.forEach((c) => n[countyPot(c)]++);
+      $("#summary").textContent = "Clay potential by county is my own rough estimate from general glacial geology. It does not change with the date.";
+      $("#legend").innerHTML = lines([3, 2, 1, 0].map((p) => [POT_COLORS[p], POT_LABEL[p] + " potential", n[p]]));
+    } else if (hasCounties && mode === "best") {
+      const n = [0, 0, 0, 0, 0]; countyFeats.forEach((c) => n[binOf(bestScore(c))]++);
+      $("#summary").textContent = "Best bets combine clay potential with how workable the ground is on this date.";
+      $("#legend").innerHTML = lines([4, 3, 2, 1, 0].map((b) => [BEST_BINS[b][1], BEST_BINS[b][2], n[b]]));
+    } else if (hasCounties) {
+      const counts = {}; countyFeats.forEach((c) => { const k = countyCond(c).key; counts[k] = (counts[k] || 0) + 1; });
+      const mine = everything(), mg = mine.filter((e) => e.cond === "good").length;
+      $("#summary").textContent = `${counts.good || 0} of ${countyFeats.length} counties look good for digging${mine.length ? `; ${mg} of ${mine.length} of your places do` : ""}.`;
+      $("#legend").innerHTML = lines(Object.entries(STATES).filter(([k]) => k !== "nodata").map(([k, st]) => [st.color, st.label, counts[k]]));
     } else {
-      const list = everything(); list.forEach((e) => { counts[e.cond] = (counts[e.cond] || 0) + 1; }); total = list.length;
-      $("#summary").textContent = !total ? "" : counts.nodata === total ? "Conditions aren't available right now." : `${counts.good || 0} of ${total} places look good for digging.`;
+      const list = everything(), counts = {}; list.forEach((e) => { counts[e.cond] = (counts[e.cond] || 0) + 1; });
+      $("#summary").textContent = list.length ? `${counts.good || 0} of ${list.length} places look good for digging.` : "";
+      $("#legend").innerHTML = lines(Object.entries(STATES).filter(([k]) => k !== "nodata").map(([k, st]) => [st.color, st.label, counts[k]]));
     }
-    $("#legend").innerHTML = Object.entries(STATES).filter(([k]) => k !== "nodata" || counts.nodata)
-      .map(([k, s]) => `<li><span class="dot" style="background:${s.color}"></span>${esc(s.label)}${counts[k] ? ` (${counts[k]})` : ""}</li>`).join("");
+    // Best bets list
+    const ranked = countyFeats.map((c) => ({ c, sc: bestScore(c) })).filter((x) => x.sc > 0).sort((a, b) => b.sc - a.sc || countyPot(b.c) - countyPot(a.c)).slice(0, 6);
+    $("#best-list").innerHTML = ranked.length
+      ? ranked.map((x, i) => `<li><button data-b="${i}"><span class="row"><span class="dot" style="background:${BEST_BINS[binOf(x.sc)][1]}"></span><strong>${esc(x.c.f.properties.name)} County</strong></span><span class="state">${esc(POT_LABEL[countyPot(x.c)])} clay potential · ${esc(STATES[countyCond(x.c).key].label)}</span></button></li>`).join("")
+      : `<li class="tiny muted">Nothing is workable on this date. The ground is frozen or too wet.</li>`;
+    $("#best-list").bestRanked = ranked;
+  }
+  function updateStatus() {
+    const live = everything().some((e) => e.w) || (picked && picked.w) || !!countyW[date];
+    $("#data-status").className = "data-status " + (live ? "live" : "est");
+    $("#data-status").innerHTML = live
+      ? "<strong>Live weather connected.</strong> Colors use real soil and rain data where available."
+      : "<strong>Showing estimates.</strong> Live weather isn't reachable, so colors show typical conditions for this date from my own climate model.";
   }
   const listHtml = (arr, attr) => arr.map((e, i) =>
     `<li><button data-${attr}="${i}"><span class="row"><span class="dot" style="background:${STATES[e.cond].color}"></span><strong>${esc(e.name)}</strong></span><span class="state">${esc(e.county || "")}${e.county ? " County · " : ""}${esc(STATES[e.cond].label)}</span></button></li>`).join("");
@@ -404,11 +514,11 @@
     dateInput.value = date;
     slider.value = Math.round((parse(date) - parse(TODAY)) / 864e5);
     everything().forEach((e) => {
-      e.cond = conditions(e.w, date).key;
+      e.cond = condFor(e, date).key;
       if (e.marker) { e.marker.setIcon(pinIcon(e, e.cond)); refreshPopup(e); }
     });
-    if (picked) { picked.marker.setIcon(pinIcon(picked, conditions(picked.w, date).key)); refreshPopup(picked); }
-    paintCounties(); renderSummary();
+    if (picked) { picked.marker.setIcon(pinIcon(picked, condFor(picked, date).key)); refreshPopup(picked); }
+    paintCounties(); renderSummary(); updateStatus();
     $("#list").innerHTML = listHtml(ents, "i");
     $("#saved-list").innerHTML = listHtml(saved, "s");
     $("#saved-count").textContent = saved.length ? "(" + saved.length + ")" : "";
@@ -417,6 +527,12 @@
     safe(() => history.replaceState(null, "", "#d=" + date + (sel ? `&lat=${sel.lat.toFixed(4)}&lng=${sel.lng.toFixed(4)}` : "")));
   }
   const goTo = (e) => { map.setView([e.lat, e.lng], Math.max(map.getZoom(), 10)); e.marker.openPopup(); $("#map").scrollIntoView({ behavior: "smooth", block: "center" }); };
+  $("#best-list").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button"), r = $("#best-list").bestRanked; if (!b || !r) return;
+    const c = r[b.dataset.b].c; map.setView([c.lat, c.lng], 9); pick(c.lat, c.lng);
+    $("#map").scrollIntoView({ behavior: "smooth", block: "center" });
+  });
+  $("#mode").addEventListener("change", (e) => { mode = e.target.value; paintCounties(); renderSummary(); });
   $("#list").addEventListener("click", (ev) => { const b = ev.target.closest("button"); if (b) goTo(ents[b.dataset.i]); });
   $("#saved-list").addEventListener("click", (ev) => { const b = ev.target.closest("button"); if (b) goTo(saved[b.dataset.s]); });
 

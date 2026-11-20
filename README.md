@@ -25,7 +25,9 @@ The Shop, Payments and Cart are hidden for now. When you're ready, open `/admin/
 
 ## Clay soil map
 `clay-map.html` is a New York clay soil map that changes with the date (past 3 months to 2 weeks ahead):
-- **Counties colored by conditions** (good, too wet, dry, frozen) from live soil temperature, soil moisture, snow and rain (Open-Meteo).
+- **Counties colored by conditions** (good, too wet, dry, frozen). It uses live soil temperature, soil moisture, snow and rain (Open-Meteo) when it can reach them, and otherwise **my own climate model** (typical conditions for that date and location), so the map is never empty.
+- **Color the counties three ways:** digging conditions, clay potential (a rough estimate from general glacial geology), or best bets (both combined), plus a ranked *Best bets on this date* list.
+- **Terrain map with streams** (OpenTopoMap, USGS topo) and an optional USGS streams and lakes overlay.
 - **Tap anywhere in New York** for conditions at that exact spot plus USDA soil survey data (clay, silt and sand %, drainage), a 3-month timeline, and the next good digging day.
 - **Search a town**, or use your location.
 - **Save spots** on your own device, **copy a link** to a spot and date, and get **directions**.

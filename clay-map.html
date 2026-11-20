@@ -31,7 +31,7 @@
     <section class="map-intro">
       <p class="eyebrow">Studio field notes</p>
       <h1>New York clay soil map</h1>
-      <p class="lede">Pick a date and the map shows which clay areas are workable that day, using live soil temperature, soil moisture, snow and rain. Tap any spot in the state for its USDA soil survey data.</p>
+      <p class="lede">Pick a date and the map shows which clay areas are workable that day. It uses live soil temperature, moisture, snow and rain when it can reach them, and my own climate calculations when it can't. Tap any spot in the state for its USDA soil survey data.</p>
       <p class="notice"><strong>Before you dig:</strong> every spot is approximate. Most land is private, and parks, preserves and state land usually forbid removing soil or rock. Get the landowner's permission first, and never dig on a bluff or stream bank that could collapse. Conditions are a rough guide from modeled weather data, not a field check.</p>
     </section>
 
@@ -67,7 +67,18 @@
       <aside class="side">
         <h2>On <span id="date-label"></span></h2>
         <p class="summary" id="summary">Loading conditions…</p>
+        <p class="data-status" id="data-status"></p>
+        <label class="field">Color the counties by
+          <select id="mode">
+            <option value="cond">Digging conditions on this date</option>
+            <option value="best">Best bets (clay + conditions)</option>
+            <option value="clay">Clay potential (my estimate)</option>
+          </select>
+        </label>
         <ul class="legend" id="legend"></ul>
+
+        <h2>Best bets on this date</h2>
+        <ul id="best-list" class="place-list"></ul>
 
         <div id="sel-panel" class="sel-panel">
           <h2 id="sel-title">Selected spot</h2>
@@ -83,16 +94,19 @@
         <h2>Layers</h2>
         <label class="toggle"><input type="checkbox" id="lyr-counties" checked> Conditions by county <span class="status" id="county-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-sites" checked> Clay places</label>
+        <label class="toggle"><input type="checkbox" id="lyr-streams"> Streams &amp; lakes (USGS) <span class="status" id="streams-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-soil"> USDA soil map areas <span class="status" id="soil-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-mrds"> USGS clay mineral sites <span class="status" id="mrds-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-geo"> USGS geology <span class="status" id="geo-status"></span></label>
         <label class="field">Base map
           <select id="basemap">
-            <option value="osm">Street map (OpenStreetMap)</option>
+            <option value="terrain">Terrain with streams (OpenTopoMap)</option>
             <option value="topo">Topographic (USGS)</option>
+            <option value="osm">Street map (OpenStreetMap)</option>
             <option value="sat">Satellite (Esri)</option>
           </select>
         </label>
+        <p class="tiny muted" id="basemap-note"></p>
 
         <h2>Places <span class="count" id="count"></span></h2>
         <ul id="list" class="place-list"></ul>
