@@ -1,0 +1,44 @@
+{
+  "sites": [
+    {
+      "name": "Haverstraw brickyards shoreline",
+      "county": "Rockland",
+      "lat": 41.197, "lng": -73.964,
+      "kind": "region",
+      "access": "unknown",
+      "notes": "Historic Hudson River brickmaking center built on glacial lake clay. Approximate area only; much of the shoreline is private or parkland."
+    },
+    {
+      "name": "Kingston / Rondout Hudson shore",
+      "county": "Ulster",
+      "lat": 41.93, "lng": -73.98,
+      "kind": "region",
+      "access": "unknown",
+      "notes": "Hudson Valley clay belt with a long brick and cement history. Approximate area; confirm the specific parcel and owner."
+    },
+    {
+      "name": "Athens–Coxsackie clay belt",
+      "county": "Greene",
+      "lat": 42.30, "lng": -73.81,
+      "kind": "region",
+      "access": "unknown",
+      "notes": "Historic Hudson River brickyard district. Approximate area only."
+    },
+    {
+      "name": "Lake Albany clay plain",
+      "county": "Albany",
+      "lat": 42.65, "lng": -73.78,
+      "kind": "region",
+      "access": "unknown",
+      "notes": "Glacial Lake Albany left thick clay deposits across the Albany area. Approximate area only; construction cuts and creek banks are often private."
+    },
+    {
+      "name": "Garvies Point clay cliffs",
+      "county": "Nassau",
+      "lat": 40.867, "lng": -73.650,
+      "kind": "restricted",
+      "access": "restricted",
+      "notes": "Cretaceous clay exposed in shoreline bluffs on Long Island. This is a county preserve and museum, where removing material is normally not allowed. Listed for geology only; check the rules before visiting."
+    }
+  ]
+}

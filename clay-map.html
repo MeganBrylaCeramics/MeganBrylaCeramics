@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New York Clay Map</title>
+  <meta name="description" content="A live map of places in New York State associated with natural clay.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="clay-map.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="index.html" class="logo" id="logo">Home</a>
+      <nav>
+        <a href="index.html#shop">Shop</a>
+        <a href="clay-map.html" aria-current="page">Clay map</a>
+        <a href="index.html#local">Local pickup</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="map-intro">
+      <h1>Where to find clay in New York</h1>
+      <p class="hero-sub">A live map of New York State with places linked to natural clay deposits. The base map and geology layers are loaded live from public servers. The markers are my own list.</p>
+      <p class="notice"><strong>Before you dig:</strong> every spot here is approximate. Most land is private, and parks, preserves and state land usually forbid removing soil or rock. Get the landowner's permission first, and never dig on a bluff or stream bank that could collapse.</p>
+    </section>
+
+    <section class="map-layout">
+      <div id="map" role="application" aria-label="Map of clay locations in New York"></div>
+      <aside class="side">
+        <h2>Layers</h2>
+        <label class="toggle"><input type="checkbox" id="lyr-sites" checked> Clay places (my list)</label>
+        <label class="toggle"><input type="checkbox" id="lyr-mrds"> USGS clay mineral sites <span class="status" id="mrds-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-geo"> USGS geology <span class="status" id="geo-status"></span></label>
+        <label class="field">Base map
+          <select id="basemap">
+            <option value="osm">Street map (OpenStreetMap)</option>
+            <option value="topo">Topographic (USGS)</option>
+            <option value="sat">Satellite (Esri)</option>
+          </select>
+        </label>
+        <h2>Places <span class="count" id="count"></span></h2>
+        <ul id="list" class="place-list"></ul>
+        <p class="tiny muted">Know a good spot, or a correction? <a id="suggest">Email me</a>.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>Map data © OpenStreetMap contributors, USGS, Esri.</p>
+  </footer>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="clay-map.js"></script>
+</body>
+</html>

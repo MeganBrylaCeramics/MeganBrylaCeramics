@@ -1,0 +1,75 @@
+# Sveltia CMS (Decap-compatible): the admin page at meganbrylaceramics.github.io/admin/
+# Change "repo" to your GitHub username/repository name.
+backend:
+  name: github
+  repo: MeganBrylaCeramics/MeganBrylaCeramics.github.io
+  branch: main
+  commit_messages:
+    update: "Update {{slug}}"
+
+
+media_folder: "images"
+public_folder: "images"
+site_url: "/"
+display_url: "/"
+
+collections:
+  - name: "shop"
+    label: "Shop"
+    editor: { preview: false }
+    files:
+      - name: "products"
+        label: "🏺 Pieces for sale"
+        file: "content/products.json"
+        fields:
+          - name: "products"
+            label: "Pieces"
+            label_singular: "piece"
+            widget: "list"
+            summary: "{{fields.name}}  ·  ${{fields.price}}  {{fields.sold}}"
+            collapsed: true
+            add_to_top: true
+            fields:
+              - { name: "name", label: "Title", widget: "string" }
+              - { name: "price", label: "Price (USD)", widget: "number", value_type: "float", min: 0 }
+              - { name: "image", label: "Photo", widget: "image", required: false, choose_url: false,
+                  hint: "Square photos look best. Drag a photo in or click to upload." }
+              - { name: "description", label: "Description", widget: "text", required: false }
+              - { name: "stripeLink", label: "Stripe Payment Link", widget: "string", required: false,
+                  hint: "Paste the https://buy.stripe.com/... link for this piece. Set 'limit payments' to 1 in Stripe." }
+              - { name: "sold", label: "Sold", widget: "boolean", default: false }
+              - { name: "localOnly", label: "Local pickup only (can't ship)", widget: "boolean", default: false }
+              - { name: "color", label: "Placeholder color (used only when there's no photo)", widget: "color", required: false, default: "#b9a58c" }
+
+      - name: "claysites"
+        label: "🗺️ Clay map places"
+        file: "content/clay-sites.json"
+        fields:
+          - name: "sites"
+            label: "Places"
+            label_singular: "place"
+            widget: "list"
+            summary: "{{fields.name}} ({{fields.county}})"
+            collapsed: true
+            add_to_top: true
+            fields:
+              - { name: "name", label: "Name", widget: "string" }
+              - { name: "county", label: "County", widget: "string" }
+              - { name: "lat", label: "Latitude", widget: "number", value_type: "float", hint: "Right-click a spot in Google Maps and click the numbers to copy them" }
+              - { name: "lng", label: "Longitude (negative in NY)", widget: "number", value_type: "float" }
+              - { name: "kind", label: "Type", widget: "select", options: ["region", "restricted"], default: "region" }
+              - { name: "access", label: "Access", widget: "select", options: ["unknown", "permitted", "restricted"], default: "unknown" }
+              - { name: "notes", label: "Notes", widget: "text" }
+
+      - name: "settings"
+        label: "⚙️ Shop settings"
+        file: "content/shop.json"
+        fields:
+          - { name: "name", label: "Shop name", widget: "string" }
+          - { name: "tagline", label: "Tagline", widget: "string" }
+          - { name: "email", label: "Contact email", widget: "string" }
+          - { name: "instagram", label: "Instagram handle (no @)", widget: "string", required: false }
+          - { name: "venmo", label: "Venmo business username (no @)", widget: "string" }
+          - { name: "pickupArea", label: "Pickup area", widget: "string" }
+          - { name: "pickupNote", label: "Pickup instructions", widget: "text" }
+          - { name: "shippingNote", label: "Shipping info", widget: "text" }

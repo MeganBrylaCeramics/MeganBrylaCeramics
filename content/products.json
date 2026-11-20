@@ -1,0 +1,64 @@
+{
+  "products": [
+    {
+      "name": "Speckled Oat Mug",
+      "price": 38,
+      "description": "12 oz mug in a speckled stoneware with a satin oatmeal glaze. Dishwasher and microwave safe.",
+      "image": "",
+      "color": "#d9cbb4",
+      "stripeLink": "https://buy.stripe.com/REPLACE_ME",
+      "sold": false,
+      "localOnly": false
+    },
+    {
+      "name": "Celadon Serving Bowl",
+      "price": 85,
+      "description": "Wide 10\" bowl with a pale celadon glaze that pools green in the carved rim.",
+      "image": "",
+      "color": "#a9c4b0",
+      "stripeLink": "https://buy.stripe.com/REPLACE_ME",
+      "sold": false,
+      "localOnly": false
+    },
+    {
+      "name": "Tenmoku Bud Vase",
+      "price": 46,
+      "description": "Small 6\" vase in a glossy iron-brown tenmoku that breaks rust-orange at the edges.",
+      "image": "",
+      "color": "#7a4a32",
+      "stripeLink": "https://buy.stripe.com/REPLACE_ME",
+      "sold": true,
+      "localOnly": false
+    },
+    {
+      "name": "Large Floor Planter",
+      "price": 160,
+      "description": "14\" planter with a drainage hole and a matte charcoal glaze. Too heavy to ship, so it's local pickup only.",
+      "image": "",
+      "color": "#4b4b4f",
+      "stripeLink": "https://buy.stripe.com/REPLACE_ME",
+      "sold": false,
+      "localOnly": true
+    },
+    {
+      "name": "Blush Dinner Plates (set of 2)",
+      "price": 72,
+      "description": "Two 10.5\" plates in a soft blush glaze over a raw clay rim.",
+      "image": "",
+      "color": "#e2b8ad",
+      "stripeLink": "https://buy.stripe.com/REPLACE_ME",
+      "sold": false,
+      "localOnly": false
+    },
+    {
+      "name": "Cobalt Drip Cups (set of 4)",
+      "price": 64,
+      "description": "Four stackable 6 oz cups with a cobalt drip over white. Great for espresso or sake.",
+      "image": "",
+      "color": "#3d5a8c",
+      "stripeLink": "https://buy.stripe.com/REPLACE_ME",
+      "sold": false,
+      "localOnly": false
+    }
+  ]
+}

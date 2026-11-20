@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ceramics Shop</title>
+  <meta name="description" content="Handmade ceramics for sale. Shipping or local pickup.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a href="#" class="logo" data-shop="name"></a>
+      <nav>
+        <a href="#shop">Shop</a>
+        <a href="clay-map.html">Clay map</a>
+        <a href="#local">Local pickup</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero wrap">
+      <h1 data-shop="tagline"></h1>
+      <p class="hero-sub">Every piece is one of a kind. Order online with card, Apple Pay or Google Pay. If you're local, pick it up and pay with Venmo.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#shop">Browse pieces</a>
+        <a class="btn btn-ghost" href="#local">Local pickup</a>
+      </div>
+    </section>
+
+    <section id="shop" class="wrap">
+      <div class="section-head">
+        <h2>Shop</h2>
+        <div class="filters" role="group" aria-label="Filter pieces">
+          <button class="chip active" data-filter="available">Available</button>
+          <button class="chip" data-filter="all">All</button>
+          <button class="chip" data-filter="local">Local only</button>
+        </div>
+      </div>
+      <div id="grid" class="grid"></div>
+    </section>
+
+    <section id="local" class="wrap local">
+      <div>
+        <h2>Local pickup</h2>
+        <p>Near <strong data-shop="pickupArea"></strong>? You can skip shipping.</p>
+        <ol class="steps">
+          <li><strong>Pick a piece</strong> and tap <em>Local pickup</em> on it.</li>
+          <li><strong>Pay with Venmo</strong> (put the piece name in the note) or with a card through checkout.</li>
+          <li><strong>Watch your email.</strong> <span data-shop="pickupNote"></span></li>
+        </ol>
+      </div>
+      <div class="local-card">
+        <p class="muted">Venmo</p>
+        <p class="venmo-handle">@<span data-shop="venmo"></span></p>
+        <a class="btn btn-venmo" id="venmo-general" target="_blank" rel="noopener">Open Venmo</a>
+        <p class="tiny muted">Use this for local pickup only. Online orders that ship should go through checkout.</p>
+      </div>
+    </section>
+
+    <section id="faq" class="wrap faq">
+      <h2>FAQ</h2>
+      <details><summary>How does shipping work?</summary><p data-shop="shippingNote"></p></details>
+      <details><summary>Can two people buy the same piece?</summary><p>No. Each piece is one of a kind, and the checkout link stops working once it sells. For Venmo pickups, I confirm the piece is still available before taking payment.</p></details>
+      <details><summary>Are they food safe?</summary><p>Yes, unless the listing says otherwise. All functional pieces use food-safe glazes and are fired to stoneware temperatures.</p></details>
+      <details><summary>Something arrived broken?</summary><p>Email me a photo within 7 days and I'll replace it or refund you.</p></details>
+    </section>
+  </main>
+
+  <footer class="wrap footer">
+    <p>© <span id="year"></span> <span data-shop="name"></span></p>
+    <p><a id="email-link"></a><span id="ig-wrap"> · <a id="ig-link" target="_blank" rel="noopener"></a></span></p>
+  </footer>
+
+  <!-- Local pickup dialog -->
+  <dialog id="pickup-dialog">
+    <form method="dialog" class="dialog-inner">
+      <button class="close" aria-label="Close">×</button>
+      <p class="muted tiny">Local pickup</p>
+      <h3 id="pd-name"></h3>
+      <p class="pd-price" id="pd-price"></p>
+      <div class="pd-option">
+        <h4>Option A: Venmo</h4>
+        <p>Pay <strong>@<span data-shop="venmo"></span></strong> and put <strong id="pd-note"></strong> in the note. I'll email you to set up pickup.</p>
+        <a class="btn btn-venmo" id="pd-venmo" target="_blank" rel="noopener">Pay with Venmo</a>
+        <p class="tiny muted">The button opens Venmo with the amount filled in. If it doesn't, search for the handle above in the app.</p>
+      </div>
+      <div class="pd-option">
+        <h4>Option B: Card</h4>
+        <p>Check out normally and choose <em>Local pickup</em> as the shipping option. Pickup is free.</p>
+        <a class="btn btn-primary" id="pd-stripe" target="_blank" rel="noopener">Pay with card</a>
+      </div>
+      <p class="tiny muted">Want to make sure it's still available first? <a id="pd-email">Email me</a>.</p>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
