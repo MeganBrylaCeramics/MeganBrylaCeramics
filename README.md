@@ -24,7 +24,14 @@ Click **Publish**. The live site updates in about a minute.
 The Shop, Payments and Cart are hidden for now. When you're ready, open `/admin/`, tick **Shop is open**, and publish. Everything below still applies.
 
 ## Clay soil map
-`clay-map.html` shows New York clay places coloured by how workable the clay is on the chosen date (past 3 months to 2 weeks ahead), using live soil temperature, soil moisture, snow and rain from Open-Meteo. Tapping any spot shows USDA soil survey data (clay, silt and sand %, drainage). The ratings are a rough guide, not a field check. Add or edit places in `/admin/` under *Clay map places*.
+`clay-map.html` is a New York clay soil map that changes with the date (past 3 months to 2 weeks ahead):
+- **Counties colored by conditions** (good, too wet, dry, frozen) from live soil temperature, soil moisture, snow and rain (Open-Meteo).
+- **Tap anywhere in New York** for conditions at that exact spot plus USDA soil survey data (clay, silt and sand %, drainage), a 3-month timeline, and the next good digging day.
+- **Search a town**, or use your location.
+- **Save spots** on your own device, **copy a link** to a spot and date, and get **directions**.
+- Optional layers: USDA soil map areas, USGS clay mineral sites and USGS geology.
+
+The ratings are a rough guide from modeled weather, not a field check. Add or edit the clay places in `/admin/` under *Clay map places*.
 
 ## Taking payments (all free to run)
 | Method | What happens |

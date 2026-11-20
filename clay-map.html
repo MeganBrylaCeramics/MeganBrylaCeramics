@@ -35,11 +35,23 @@
       <p class="notice"><strong>Before you dig:</strong> every spot is approximate. Most land is private, and parks, preserves and state land usually forbid removing soil or rock. Get the landowner's permission first, and never dig on a bluff or stream bank that could collapse. Conditions are a rough guide from modeled weather data, not a field check.</p>
     </section>
 
+    <section class="finder" aria-label="Find a place">
+      <form id="search-form" class="search" autocomplete="off">
+        <input id="search" type="search" placeholder="Search a New York town, e.g. Kingston" aria-label="Search a New York town">
+        <button class="chip" type="submit">Search</button>
+        <button class="chip" type="button" id="locate">Use my location</button>
+      </form>
+      <ul id="results" class="results" hidden></ul>
+    </section>
+
     <section class="datebar" aria-label="Choose a date">
       <div class="datebar-top">
         <label for="date">Date</label>
         <input type="date" id="date">
+        <button type="button" class="chip" id="back7" aria-label="Back one week">−1 week</button>
         <button type="button" class="chip" id="today">Today</button>
+        <button type="button" class="chip" id="fwd7" aria-label="Forward one week">+1 week</button>
+        <button type="button" class="chip" id="nextgood">Next good day</button>
         <span class="muted tiny" id="date-note"></span>
       </div>
       <input type="range" id="slider" aria-label="Date slider" step="1">
@@ -48,15 +60,30 @@
     </section>
 
     <section class="map-layout">
-      <div id="map" role="application" aria-label="Map of clay conditions in New York"></div>
+      <div class="map-col">
+        <div id="map" role="application" aria-label="Map of clay conditions in New York"></div>
+        <p class="hint tiny muted">Tap anywhere in New York to check that exact spot. Counties are colored by conditions at their center.</p>
+      </div>
       <aside class="side">
         <h2>On <span id="date-label"></span></h2>
         <p class="summary" id="summary">Loading conditions…</p>
         <ul class="legend" id="legend"></ul>
 
+        <div id="sel-panel" class="sel-panel">
+          <h2 id="sel-title">Selected spot</h2>
+          <p class="muted tiny" id="sel-hint">Tap the map or choose a place to see its 3-month timeline.</p>
+          <div id="sel-body" hidden>
+            <p class="tiny muted">Each bar is one day. Tap a bar to jump to that date.</p>
+            <svg id="timeline" viewBox="0 0 432 44" preserveAspectRatio="none" role="img" aria-label="Daily digging conditions timeline"></svg>
+            <div class="tl-ends tiny muted"><span id="tl-min"></span><span id="tl-max"></span></div>
+            <p id="sel-next" class="sel-next"></p>
+          </div>
+        </div>
+
         <h2>Layers</h2>
+        <label class="toggle"><input type="checkbox" id="lyr-counties" checked> Conditions by county <span class="status" id="county-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-sites" checked> Clay places</label>
-        <label class="toggle"><input type="checkbox" id="lyr-soil"> USDA soil map units <span class="status" id="soil-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-soil"> USDA soil map areas <span class="status" id="soil-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-mrds"> USGS clay mineral sites <span class="status" id="mrds-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-geo"> USGS geology <span class="status" id="geo-status"></span></label>
         <label class="field">Base map
@@ -69,6 +96,10 @@
 
         <h2>Places <span class="count" id="count"></span></h2>
         <ul id="list" class="place-list"></ul>
+
+        <h2>My saved spots <span class="count" id="saved-count"></span></h2>
+        <p class="tiny muted" id="saved-empty">Tap the map, then choose <em>Save this spot</em>. Saved on this device only.</p>
+        <ul id="saved-list" class="place-list"></ul>
         <p class="tiny muted">Know a good spot, or a correction? <a id="suggest">Email me</a>.</p>
       </aside>
     </section>
