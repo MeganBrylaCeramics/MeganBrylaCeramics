@@ -35,6 +35,8 @@ The Shop, Payments and Cart are hidden for now. When you're ready, open `/admin/
 - **Save spots** on your own device, **copy a link** to a spot and date, and get **directions**.
 - Optional layers: USDA soil map areas, USGS clay mineral sites and USGS geology.
 
+The map lists 36 places in four types, filterable and clustered: clay regions, **historic brick-making towns**, **geology maps and clay lowlands** (NY State Museum surficial map sheets and the Champlain, St. Lawrence and Great Lakes plains) and places **reported in stream plans**. None are verified digging spots. Add your own in `/admin/` under *Clay map places*.
+
 The ratings are a rough guide from modeled weather, not a field check. Add or edit the clay places in `/admin/` under *Clay map places*.
 
 ## Taking payments (all free to run)

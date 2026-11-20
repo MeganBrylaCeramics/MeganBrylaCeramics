@@ -208,7 +208,7 @@ collections:
               - { name: "county", label: "County", widget: "string" }
               - { name: "lat", label: "Latitude", widget: "number", value_type: "float", hint: "Right-click a spot in Google Maps and click the numbers to copy them" }
               - { name: "lng", label: "Longitude (negative in NY)", widget: "number", value_type: "float" }
-              - { name: "kind", label: "Type", widget: "select", options: ["region", "restricted"], default: "region" }
+              - { name: "kind", label: "Type", widget: "select", options: ["region", "historic", "geology", "reported", "restricted"], default: "region" }
               - { name: "access", label: "Access", widget: "select", options: ["unknown", "permitted", "restricted"], default: "unknown" }
               - { name: "notes", label: "Notes", widget: "text" }
               - { name: "source", label: "Source (link or name, optional)", widget: "string", required: false, hint: "Where this spot was reported, e.g. a link to a post or who told you." }

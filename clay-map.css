@@ -116,3 +116,16 @@ body { --ink: var(--text); --line: var(--border); --radius: 14px; }
 .data-status .detail { display: block; margin-top: 4px; font-size: .75rem; opacity: .8; word-break: break-word; }
 .data-status button { all: unset; cursor: pointer; text-decoration: underline; font-weight: 600; margin-left: 6px; }
 .tiny { font-size: .82rem; line-height: 1.45; }
+
+/* ---- place types, filters, clusters ---- */
+.pin.historic { border-radius: 4px; }
+.pin.geology { clip-path: polygon(50% 0, 100% 100%, 0 100%); border: none; width: 22px; height: 20px; box-shadow: none; }
+.pin.reported { box-shadow: 0 0 0 3px #7b4ea3, 0 1px 4px rgb(0 0 0 / .5); }
+.kind-filter { display: grid; gap: 2px; margin-bottom: 6px; font-size: .85rem; }
+.kind-filter label { cursor: pointer; }
+.kind-filter input { width: auto; display: inline-block; margin: 0 6px 0 0; vertical-align: middle; }
+.key-line { margin: 6px 0 10px; }
+.key-line span { display: inline-block; width: 11px; height: 11px; background: #8aa0ad; margin: 0 2px 0 6px; vertical-align: -1px; }
+.key-line .k-dot { border-radius: 50%; margin-left: 0; } .key-line .k-sq { border-radius: 3px; }
+.key-line .k-tri { clip-path: polygon(50% 0, 100% 100%, 0 100%); } .key-line .k-ring { border-radius: 50%; background: none; border: 2px solid #7b4ea3; width: 7px; height: 7px; }
+.marker-cluster div { font: 700 .8rem "DM Sans", sans-serif; }

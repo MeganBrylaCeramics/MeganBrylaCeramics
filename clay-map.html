@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+  <link rel="stylesheet" href="vendor/markercluster/MarkerCluster.css">
+  <link rel="stylesheet" href="vendor/markercluster/MarkerCluster.Default.css">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="clay-map.css">
 </head>
@@ -117,6 +119,8 @@
         </div>
 
         <h2>Places <span class="count" id="count"></span></h2>
+        <div id="kind-filter" class="kind-filter"></div>
+        <p class="tiny muted key-line"><span class="k-dot"></span> region &nbsp; <span class="k-sq"></span> historic town &nbsp; <span class="k-tri"></span> geology area &nbsp; <span class="k-ring"></span> reported</p>
         <ul id="list" class="place-list"></ul>
 
         <h2>My saved spots <span class="count" id="saved-count"></span></h2>
@@ -142,6 +146,7 @@
   </footer>
 
   <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="vendor/markercluster/leaflet.markercluster.js"></script>
   <script src="clay-map.js"></script>
 </body>
 </html>

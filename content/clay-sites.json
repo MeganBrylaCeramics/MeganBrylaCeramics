@@ -3,7 +3,8 @@
     {
       "name": "Haverstraw brickyards shoreline",
       "county": "Rockland",
-      "lat": 41.197, "lng": -73.964,
+      "lat": 41.197,
+      "lng": -73.964,
       "kind": "region",
       "access": "unknown",
       "notes": "Historic Hudson River brickmaking center built on glacial lake clay. Approximate area only; much of the shoreline is private or parkland."
@@ -11,7 +12,8 @@
     {
       "name": "Kingston / Rondout Hudson shore",
       "county": "Ulster",
-      "lat": 41.93, "lng": -73.98,
+      "lat": 41.93,
+      "lng": -73.98,
       "kind": "region",
       "access": "unknown",
       "notes": "Hudson Valley clay belt with a long brick and cement history. Approximate area; confirm the specific parcel and owner."
@@ -19,7 +21,8 @@
     {
       "name": "Athens–Coxsackie clay belt",
       "county": "Greene",
-      "lat": 42.30, "lng": -73.81,
+      "lat": 42.3,
+      "lng": -73.81,
       "kind": "region",
       "access": "unknown",
       "notes": "Historic Hudson River brickyard district. Approximate area only."
@@ -27,7 +30,8 @@
     {
       "name": "Lake Albany clay plain",
       "county": "Albany",
-      "lat": 42.65, "lng": -73.78,
+      "lat": 42.65,
+      "lng": -73.78,
       "kind": "region",
       "access": "unknown",
       "notes": "Glacial Lake Albany left thick clay deposits across the Albany area. Approximate area only; construction cuts and creek banks are often private."
@@ -35,10 +39,314 @@
     {
       "name": "Garvies Point clay cliffs",
       "county": "Nassau",
-      "lat": 40.867, "lng": -73.650,
+      "lat": 40.867,
+      "lng": -73.65,
       "kind": "restricted",
       "access": "restricted",
       "notes": "Cretaceous clay exposed in shoreline bluffs on Long Island. This is a county preserve and museum, where removing material is normally not allowed. Listed for geology only; check the rules before visiting."
+    },
+    {
+      "name": "Stony Point brickyard shoreline",
+      "county": "Rockland",
+      "lat": 41.231,
+      "lng": -73.989,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Verplanck brickyard shoreline",
+      "county": "Westchester",
+      "lat": 41.254,
+      "lng": -73.96,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Croton Point area",
+      "county": "Westchester",
+      "lat": 41.205,
+      "lng": -73.89,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Cornwall-on-Hudson brickyard shoreline",
+      "county": "Orange",
+      "lat": 41.44,
+      "lng": -74.02,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Newburgh waterfront",
+      "county": "Orange",
+      "lat": 41.503,
+      "lng": -74.01,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Port Ewen brickyard shoreline",
+      "county": "Ulster",
+      "lat": 41.9,
+      "lng": -73.98,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Glasco brickyard shoreline",
+      "county": "Ulster",
+      "lat": 42.05,
+      "lng": -73.95,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Saugerties brickyard shoreline",
+      "county": "Ulster",
+      "lat": 42.077,
+      "lng": -73.953,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Malden-on-Hudson brickyard shoreline",
+      "county": "Ulster",
+      "lat": 42.1,
+      "lng": -73.95,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Catskill brickyard shoreline",
+      "county": "Greene",
+      "lat": 42.215,
+      "lng": -73.865,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Coxsackie brickyard shoreline",
+      "county": "Greene",
+      "lat": 42.35,
+      "lng": -73.8,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Stuyvesant brickyard shoreline",
+      "county": "Columbia",
+      "lat": 42.39,
+      "lng": -73.78,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Hudson brickyard shoreline",
+      "county": "Columbia",
+      "lat": 42.25,
+      "lng": -73.79,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Coeymans brickyard shoreline",
+      "county": "Albany",
+      "lat": 42.48,
+      "lng": -73.8,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Ravena brickyard shoreline",
+      "county": "Albany",
+      "lat": 42.47,
+      "lng": -73.82,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Cohoes brickyard shoreline",
+      "county": "Albany",
+      "lat": 42.774,
+      "lng": -73.7,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Historically a Hudson River brick-making town built on glacial lake clay. Approximate town location, not a verified collecting spot: shoreline and banks are mostly private, railroad or parkland.",
+      "source": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "name": "Kreischerville (Charleston)",
+      "county": "Richmond",
+      "lat": 40.52,
+      "lng": -74.23,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Staten Island was a brick and terra cotta center on Cretaceous clay beds. Approximate area. Much of it is built over or protected."
+    },
+    {
+      "name": "Tottenville clay beds",
+      "county": "Richmond",
+      "lat": 40.51,
+      "lng": -74.25,
+      "kind": "historic",
+      "access": "unknown",
+      "notes": "Southern Staten Island clays were once dug for brick and pottery. Approximate area; mostly developed or parkland."
+    },
+    {
+      "name": "Kerhonkson quadrangle (surficial map)",
+      "county": "Ulster",
+      "lat": 41.78,
+      "lng": -74.3,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "NYS Museum surficial geology sheet that describes glacial lake deposits. Glacial lake deposits mapped by the New York State Museum. A map sheet shows where lake-bed clay was laid down; it does not say the clay is accessible or legal to dig.",
+      "source": "https://www.nysm.nysed.gov/sites/default/files/mc63_kerhonson.pdf"
+    },
+    {
+      "name": "Mohonk Lake quadrangle (surficial map)",
+      "county": "Ulster",
+      "lat": 41.77,
+      "lng": -74.15,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "NYS Museum sheet describing laminated silt and clay deposited in a glacial lake, roughly 3 to 15 meters thick. Glacial lake deposits mapped by the New York State Museum. A map sheet shows where lake-bed clay was laid down; it does not say the clay is accessible or legal to dig.",
+      "source": "https://nysm.nysed.gov/sites/default/files/mc72_mohonk_lake.pdf"
+    },
+    {
+      "name": "Altamont quadrangle (surficial map)",
+      "county": "Albany",
+      "lat": 42.7,
+      "lng": -74.03,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "NYS Museum sheet showing glacial lake deposits from the Lake Albany period. Glacial lake deposits mapped by the New York State Museum. A map sheet shows where lake-bed clay was laid down; it does not say the clay is accessible or legal to dig.",
+      "source": "https://www.nysm.nysed.gov/sites/default/files/mc232_altamont_surficial.pdf"
+    },
+    {
+      "name": "Schenectady quadrangle (surficial map)",
+      "county": "Schenectady",
+      "lat": 42.81,
+      "lng": -73.94,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "NYS Museum surficial geology sheet for the Schenectady area. Check it for lake-bed deposits. Glacial lake deposits mapped by the New York State Museum. A map sheet shows where lake-bed clay was laid down; it does not say the clay is accessible or legal to dig.",
+      "source": "https://www.nysm.nysed.gov/sites/default/files/mc136_schenectady.pdf"
+    },
+    {
+      "name": "Lyons quadrangle (surficial map)",
+      "county": "Wayne",
+      "lat": 43.06,
+      "lng": -76.99,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "NYS Museum surficial geology sheet for the Lake Ontario plain near Lyons. Glacial lake deposits mapped by the New York State Museum. A map sheet shows where lake-bed clay was laid down; it does not say the clay is accessible or legal to dig.",
+      "source": "https://www.nysm.nysed.gov/sites/default/files/mc79_lyons.pdf"
+    },
+    {
+      "name": "Columbia County surficial geology map",
+      "county": "Columbia",
+      "lat": 42.25,
+      "lng": -73.63,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "County-wide NYS Museum surficial map for the Hudson Valley clay belt. Glacial lake deposits mapped by the New York State Museum. A map sheet shows where lake-bed clay was laid down; it does not say the clay is accessible or legal to dig.",
+      "source": "https://nysm.nysed.gov/sites/default/files/2025-10/MC179_ColumbiaCtySurfiicial.pdf"
+    },
+    {
+      "name": "Dutchess County surficial geology map",
+      "county": "Dutchess",
+      "lat": 41.76,
+      "lng": -73.74,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "County-wide NYS Museum surficial map. Glacial lake deposits mapped by the New York State Museum. A map sheet shows where lake-bed clay was laid down; it does not say the clay is accessible or legal to dig.",
+      "source": "https://www.nysm.nysed.gov/sites/default/files/mc180_dutchessctysurficial.pdf"
+    },
+    {
+      "name": "Stony Clove Creek (Catskills)",
+      "county": "Greene",
+      "lat": 42.13,
+      "lng": -74.23,
+      "kind": "reported",
+      "access": "unknown",
+      "notes": "Catskill stream management plans for Stony Clove note severe stream bank erosion and clay exposures along some banks. Approximate area. Banks are mostly private, and Forest Preserve land forbids removing soil.",
+      "source": "https://catskillstreams.org/pdfs/stonyclovesmp/34_mu17.pdf"
+    },
+    {
+      "name": "Champlain Valley lowlands",
+      "county": "Clinton",
+      "lat": 44.7,
+      "lng": -73.45,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "Champlain Sea and glacial lake clays fill the valley lowlands. Broad lowland area where glacial lakes or the Champlain Sea left clay. Not a collecting spot: use the soil explorer to look along streams here and ask landowners."
+    },
+    {
+      "name": "St. Lawrence lowlands",
+      "county": "St. Lawrence",
+      "lat": 44.6,
+      "lng": -75.1,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "Marine clays left by the Champlain Sea in the St. Lawrence valley. Broad lowland area where glacial lakes or the Champlain Sea left clay. Not a collecting spot: use the soil explorer to look along streams here and ask landowners."
+    },
+    {
+      "name": "Lake Iroquois plain (Wayne and Monroe)",
+      "county": "Wayne",
+      "lat": 43.2,
+      "lng": -77.2,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "Glacial lake plain south of Lake Ontario. Broad lowland area where glacial lakes or the Champlain Sea left clay. Not a collecting spot: use the soil explorer to look along streams here and ask landowners."
+    },
+    {
+      "name": "Lake Tonawanda plain (Niagara)",
+      "county": "Niagara",
+      "lat": 43.1,
+      "lng": -78.7,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "Flat glacial lake plain with fine-grained soils. Broad lowland area where glacial lakes or the Champlain Sea left clay. Not a collecting spot: use the soil explorer to look along streams here and ask landowners."
+    },
+    {
+      "name": "Seneca Lake south end",
+      "county": "Schuyler",
+      "lat": 42.38,
+      "lng": -76.87,
+      "kind": "geology",
+      "access": "unknown",
+      "notes": "Lake-bed deposits in the Finger Lakes valley floors. Broad lowland area where glacial lakes or the Champlain Sea left clay. Not a collecting spot: use the soil explorer to look along streams here and ask landowners."
     }
   ]
 }

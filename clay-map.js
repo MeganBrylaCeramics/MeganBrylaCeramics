@@ -257,9 +257,10 @@
 
   const pinIcon = (e, key) => L.divIcon({
     className: "", iconSize: [20, 20], iconAnchor: [10, 10],
-    html: `<div class="pin ${e.kind === "restricted" ? "restricted" : ""} ${e.type === "saved" ? "saved" : ""} ${e.type === "pick" ? "pick" : ""}" style="background:${STATES[key].color}"></div>`,
+    html: `<div class="pin ${e.kind === "restricted" ? "restricted" : ""} ${["historic", "geology", "reported"].includes(e.kind) && e.type === "place" ? e.kind : ""} ${e.type === "saved" ? "saved" : ""} ${e.type === "pick" ? "pick" : ""}" style="background:${STATES[key].color}"></div>`,
   });
   const accessLabel = { restricted: "Collecting restricted", unknown: "Permission needed", permitted: "Permission granted" };
+  const TYPE_TAG = { region: "Clay region", historic: "Historic brick town", geology: "Geology / map area", reported: "Reported in a plan", restricted: "Collecting restricted" };
   const kindText = (e) => e.type === "pick" ? "Selected spot" : e.type === "saved" ? "Saved spot" : "";
 
   function popupHtml(e) {
@@ -276,7 +277,7 @@
       ${m.tmax != null ? `<dt>Air high / low</dt><dd>${F(m.tmax).toFixed(0)}° / ${F(m.tmin).toFixed(0)}°F</dd>` : ""}</dl>`;
     const geo = geoOf(e.county || countyAt(e.lat, e.lng));
     const head = e.type === "place"
-      ? `<span class="tag ${e.kind === "restricted" ? "restricted" : ""}">${esc(accessLabel[e.access] || "Permission needed")}</span><h3>${esc(e.name)}</h3><div>${esc(e.county)} County</div><p>${esc(e.notes)}</p>${e.source ? `<p class="src">${/^https?:\/\//.test(e.source) ? `<a href="${esc(e.source)}" target="_blank" rel="noopener">Source</a>` : "Source: " + esc(e.source)}</p>` : ""}`
+      ? `<span class="tag ${e.kind === "restricted" ? "restricted" : ""}">${esc(TYPE_TAG[e.kind] || "Clay region")}</span> <span class="tag ${e.kind === "restricted" ? "restricted" : ""}">${esc(accessLabel[e.access] || "Permission needed")}</span><h3>${esc(e.name)}</h3><div>${esc(e.county)} County</div><p>${esc(e.notes)}</p>${e.source ? `<p class="src">${/^https?:\/\//.test(e.source) ? `<a href="${esc(e.source)}" target="_blank" rel="noopener">Source</a>` : "Source: " + esc(e.source)}</p>` : ""}`
       : `<span class="tag">${kindText(e)}</span><h3>${esc(e.name || (e.county ? e.county + " County spot" : "Selected spot"))}</h3><div>${e.county ? esc(e.county) + " County · " : ""}${e.lat.toFixed(4)}, ${e.lng.toFixed(4)}</div>`;
     const actions = `<div class="popup-actions">
       ${e.type === "pick" ? `<button type="button" data-act="save">Save this spot</button>` : ""}
@@ -299,7 +300,7 @@
   }
   function refreshPopup(e) { if (e.marker && e.marker.isPopupOpen()) e.marker.getPopup().setContent(popupHtml(e)); }
 
-  const sitesLayer = L.layerGroup().addTo(map);
+  const sitesLayer = L.markerClusterGroup({ maxClusterRadius: 38, disableClusteringAtZoom: 10, showCoverageOnHover: false }).addTo(map);
   const savedLayer = L.layerGroup().addTo(map);
   function addMarker(e, layer) {
     e.marker = L.marker([e.lat, e.lng], { icon: pinIcon(e, "nodata"), title: e.name || "Selected spot" }).addTo(layer);
@@ -308,7 +309,17 @@
   }
   ents.forEach((e) => addMarker(e, sitesLayer));
   saved.forEach((e) => addMarker(e, savedLayer));
-  $("#count").textContent = "(" + ents.length + ")";
+  const shownKinds = new Set(Object.keys(TYPE_TAG));
+  const KIND_COUNT = {}; ents.forEach((e) => (KIND_COUNT[e.kind] = (KIND_COUNT[e.kind] || 0) + 1));
+  $("#kind-filter").innerHTML = Object.entries(TYPE_TAG).filter(([k]) => KIND_COUNT[k])
+    .map(([k, label]) => `<label><input type="checkbox" data-kind="${k}" checked> ${esc(label)} (${KIND_COUNT[k]})</label>`).join("");
+  $("#kind-filter").addEventListener("change", (ev) => {
+    const k = ev.target.dataset.kind; if (!k) return;
+    ev.target.checked ? shownKinds.add(k) : shownKinds.delete(k);
+    ents.forEach((e) => (shownKinds.has(e.kind) ? sitesLayer.addLayer(e.marker) : sitesLayer.removeLayer(e.marker)));
+    render();
+  });
+  const visibleEnts = () => ents.filter((e) => shownKinds.has(e.kind));
   $("#lyr-sites").addEventListener("change", (e) => (e.target.checked ? sitesLayer.addTo(map) : map.removeLayer(sitesLayer)));
 
   // Popup buttons (delegated, because popup contents are rebuilt when the date changes)
@@ -512,7 +523,7 @@
     const rb = $("#retry-live"); if (rb) rb.onclick = retryLive;
   }
   const listHtml = (arr, attr) => arr.map((e, i) =>
-    `<li><button data-${attr}="${i}"><span class="row"><span class="dot" style="background:${STATES[e.cond].color}"></span><strong>${esc(e.name)}</strong></span><span class="state">${esc(e.county || "")}${e.county ? " County · " : ""}${esc(STATES[e.cond].label)}</span></button></li>`).join("");
+    `<li><button data-${attr}="${i}"><span class="row"><span class="dot" style="background:${STATES[e.cond].color}"></span><strong>${esc(e.name)}</strong></span><span class="state">${e.type === "place" && TYPE_TAG[e.kind] ? esc(TYPE_TAG[e.kind]) + " · " : ""}${esc(e.county || "")}${e.county ? " County · " : ""}${esc(STATES[e.cond].label)}</span></button></li>`).join("");
 
   function render() {
     $("#date-label").textContent = pretty(date);
@@ -526,21 +537,23 @@
     });
     if (picked) { picked.marker.setIcon(pinIcon(picked, condFor(picked, date).key)); refreshPopup(picked); }
     paintCounties(); renderSummary(); updateStatus();
-    $("#list").innerHTML = listHtml(ents, "i");
+    const ve = visibleEnts();
+    $("#count").textContent = "(" + ve.length + (ve.length < ents.length ? " of " + ents.length : "") + ")";
+    $("#list").innerHTML = listHtml(ve, "i");
     $("#saved-list").innerHTML = listHtml(saved, "s");
     $("#saved-count").textContent = saved.length ? "(" + saved.length + ")" : "";
     $("#saved-empty").hidden = saved.length > 0;
     drawSelection();
     safe(() => history.replaceState(null, "", "#d=" + date + (sel ? `&lat=${sel.lat.toFixed(4)}&lng=${sel.lng.toFixed(4)}` : "")));
   }
-  const goTo = (e) => { map.setView([e.lat, e.lng], Math.max(map.getZoom(), 10)); e.marker.openPopup(); $("#map").scrollIntoView({ behavior: "smooth", block: "center" }); };
+  const goTo = (e) => { map.setView([e.lat, e.lng], Math.max(map.getZoom(), 10)); if (sitesLayer.zoomToShowLayer && e.type === "place") sitesLayer.zoomToShowLayer(e.marker, () => e.marker.openPopup()); else e.marker.openPopup(); $("#map").scrollIntoView({ behavior: "smooth", block: "center" }); };
   $("#best-list").addEventListener("click", (ev) => {
     const b = ev.target.closest("button"), r = $("#best-list").bestRanked; if (!b || !r) return;
     const c = r[b.dataset.b].c; map.setView([c.lat, c.lng], 9); pick(c.lat, c.lng);
     $("#map").scrollIntoView({ behavior: "smooth", block: "center" });
   });
   $("#mode").addEventListener("change", (e) => { mode = e.target.value; paintCounties(); renderSummary(); });
-  $("#list").addEventListener("click", (ev) => { const b = ev.target.closest("button"); if (b) goTo(ents[b.dataset.i]); });
+  $("#list").addEventListener("click", (ev) => { const b = ev.target.closest("button"); if (b) goTo(visibleEnts()[b.dataset.i]); });
   $("#saved-list").addEventListener("click", (ev) => { const b = ev.target.closest("button"); if (b) goTo(saved[b.dataset.s]); });
 
   function setDate(d) { if (d < MIN) d = MIN; if (d > MAX) d = MAX; date = d; render(); queueCounties(); }
