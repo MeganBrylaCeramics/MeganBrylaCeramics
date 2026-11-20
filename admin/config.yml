@@ -1,8 +1,8 @@
-# Sveltia CMS (Decap-compatible): the admin page at meganbrylaceramics.github.io/admin/
+# Sveltia CMS (Decap-compatible): the admin page at meganbrylaceramics.github.io/MeganBrylaCeramics/admin/
 # Change "repo" to your GitHub username/repository name.
 backend:
   name: github
-  repo: MeganBrylaCeramics/MeganBrylaCeramics.github.io
+  repo: MeganBrylaCeramics/MeganBrylaCeramics
   branch: main
   commit_messages:
     update: "Update {{slug}}"

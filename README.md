@@ -13,19 +13,19 @@ admin/                          the photo/title editor (Sveltia CMS)
 ## One-time setup (about 20 minutes)
 
 ### 1. Put it on GitHub
-Create a free GitHub account and a new repository called `MeganBrylaCeramics.github.io`, then upload this folder to it.
-In `admin/config.yml`, change `MeganBrylaCeramics/MeganBrylaCeramics.github.io` to your repository.
+Create a free GitHub account and a new repository called `MeganBrylaCeramics`, then upload this folder to it.
+In `admin/config.yml`, change `MeganBrylaCeramics/MeganBrylaCeramics` to your repository.
 
 ### 2. Host it free on GitHub Pages
 1. In your repo, go to **Settings → Pages**. Under "Build and deployment", choose **Deploy from a branch**, pick `main` and `/ (root)`, and click Save.
-2. After a minute your shop is live at `https://meganbrylaceramics.github.io/`.
+2. After a minute your shop is live at `https://meganbrylaceramics.github.io/MeganBrylaCeramics/`.
 3. Optional: add a custom domain (about $12/year) in the same Pages settings.
 
 ### 2b. Log in to the editor (no extra service needed)
 The editor is Sveltia CMS and it logs in with a GitHub token:
 1. On GitHub go to **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
-2. Limit it to the `MeganBrylaCeramics.github.io` repository and give it **Contents: Read and write**.
-3. Open `https://meganbrylaceramics.github.io/admin/`, choose **Sign in with token**, and paste it. Keep the token somewhere safe (a password manager).
+2. Limit it to the `MeganBrylaCeramics` repository and give it **Contents: Read and write**.
+3. Open `https://meganbrylaceramics.github.io/MeganBrylaCeramics/admin/`, choose **Sign in with token**, and paste it. Keep the token somewhere safe (a password manager).
 
 ### 3. Stripe
 1. Create a Stripe account (no monthly fee, about 2.9% + 30¢ per sale).
