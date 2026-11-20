@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="clay-map.css">
 </head>
-<body>
+<body class="map-page">
   <header class="site-header">
     <a href="index.html#/" class="wordmark">
       <span class="wm-name">Megan Bryla</span>
@@ -29,30 +29,26 @@
     </nav>
   </header>
 
-  <main class="cm-wrap">
-    <section class="map-intro">
-      <p class="eyebrow">Studio field notes</p>
-      <h1>New York clay soil map</h1>
-      <p class="lede">USDA soil survey clay data, every stream and lake, 124 documented USGS clay pits and day-by-day digging conditions. Zoom in to see the soil colored by how much clay it holds, with streams that cut through clay drawn in orange.</p>
-      <p class="notice"><strong>Before you dig:</strong> most land is private, active pits are commercial property, and state land forbids removing soil without a permit. Ask the landowner first, and never dig into a bank that could collapse.</p>
-    </section>
+  <main class="map-app" id="app">
+    <div id="map" role="application" aria-label="Map of clay soils and conditions in New York"></div>
 
-    <section class="finder" aria-label="Find a place">
+    <section class="finder fl-card" aria-label="Find a place">
       <form id="search-form" class="search" autocomplete="off">
-        <input id="search" type="search" placeholder="Search a New York town, e.g. Kingston" aria-label="Search a New York town">
-        <button class="chip" type="submit">Search</button>
-        <button class="chip" type="button" id="locate">Use my location</button>
+        <input id="search" type="search" placeholder="Search a New York town" aria-label="Search a New York town">
+        <button class="chip" type="submit" aria-label="Search">Search</button>
+        <button class="chip icon" type="button" id="locate" aria-label="Use my location" title="Use my location">◎</button>
       </form>
       <ul id="results" class="results" hidden></ul>
     </section>
 
-    <section class="datebar" aria-label="Choose a date">
+    <div class="zoom-hint" id="zoom-hint"></div>
+
+    <section class="datebar fl-card" aria-label="Choose a date">
       <div class="datebar-top">
-        <label for="date">Date</label>
-        <input type="date" id="date">
-        <button type="button" class="chip" id="back7">−1 week</button>
+        <input type="date" id="date" aria-label="Date">
+        <button type="button" class="chip" id="back7" title="Back one week">−1 wk</button>
         <button type="button" class="chip" id="today">Today</button>
-        <button type="button" class="chip" id="fwd7">+1 week</button>
+        <button type="button" class="chip" id="fwd7" title="Forward one week">+1 wk</button>
         <button type="button" class="chip" id="nextgood">Next good day</button>
         <span class="date-note" id="date-note"></span>
       </div>
@@ -61,14 +57,17 @@
       <p class="season" id="season"></p>
     </section>
 
-    <section class="map-layout">
-      <div class="map-col">
-        <div id="map" role="application" aria-label="Map of clay soils and conditions in New York"></div>
-        <div class="zoom-hint" id="zoom-hint"></div>
-        <p class="hint tiny muted">Tap anywhere in New York for that spot's conditions, soil survey and 6-month timeline.</p>
-      </div>
+    <button type="button" class="panel-toggle fl-card" id="panel-toggle" aria-expanded="true" aria-controls="panel">
+      <span class="pt-open">Hide panel ›</span><span class="pt-closed">‹ Layers &amp; info</span>
+    </button>
 
-      <aside class="side">
+    <aside class="side fl-card" id="panel">
+      <div class="panel-head">
+        <h1>New York clay soil map</h1>
+        <button type="button" class="panel-close" id="panel-close" aria-label="Close panel">✕</button>
+      </div>
+      <p class="notice"><strong>Before you dig:</strong> most land is private, active pits are commercial property, and state land forbids removing soil without a permit. Ask the landowner first.</p>
+
         <details open>
           <summary>On <span id="date-label"></span></summary>
           <p class="data-status" id="data-status"></p>
@@ -139,9 +138,11 @@
           <ul id="saved-list" class="place-list"></ul>
         </details>
         <p class="tiny muted">Know a good spot, or a correction? <a id="suggest">Email me</a>.</p>
-      </aside>
-    </section>
+            <p class="tiny muted"><a href="#community" id="to-refs">Where potters talk about wild clay ↓</a></p>
+    </aside>
+  </main>
 
+  <div class="cm-wrap">
     <section id="community" class="refs" aria-labelledby="refs-title">
       <h2 id="refs-title">Where potters talk about wild clay</h2>
       <p class="muted refs-intro">There's no public database of exact digging spots, and people rarely publish them, since most good banks are on private land. These are the groups, programs and guides where New York potters share how and where to find clay. Ask them, and ask landowners.</p>
@@ -151,7 +152,7 @@
         <div><h3>Rules on state land</h3><ul id="refs-rules"></ul></div>
       </div>
     </section>
-  </main>
+  </div>
 
   <footer class="cm-wrap cm-footer">
     <p>Soil: USDA NRCS Soil Data Access (SSURGO). Streams and lakes: USGS National Hydrography Dataset. Clay pits: USGS Mineral Resources Data System. Weather: Open-Meteo.com. Base maps © OpenStreetMap contributors, OpenTopoMap, USGS, Esri.</p>

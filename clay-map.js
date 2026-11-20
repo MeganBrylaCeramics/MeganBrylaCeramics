@@ -62,6 +62,28 @@
   const NY = L.latLngBounds([40.45, -79.8], [45.05, -71.8]);
   const map = L.map("map", { maxBounds: NY.pad(0.4), minZoom: 6 }).fitBounds(NY);
   L.control.scale({ imperial: true }).addTo(map);
+
+  // Full-screen layout: size the app to the window below the site header, and a collapsible panel.
+  const app = $("#app"), narrow = () => innerWidth <= 760;
+  const fitApp = () => { document.documentElement.style.setProperty("--hdr", ($(".site-header")?.offsetHeight || 65) + "px"); map.invalidateSize(); };
+  function setPanel(open) {
+    app.classList.toggle("panel-closed", !open);
+    $("#panel-toggle").setAttribute("aria-expanded", String(open));
+    padPopups(); setTimeout(() => map.invalidateSize(), 280);
+  }
+  $("#panel-toggle").addEventListener("click", () => setPanel(true));
+  $("#panel-close").addEventListener("click", () => setPanel(false));
+  const closeOnPhone = () => { if (narrow()) setPanel(false); };
+  // Keep popups clear of the search box, the date dock and the open panel.
+  const padPopups = () => {
+    L.Popup.prototype.options.autoPanPaddingTopLeft = L.point(16, 70);
+    L.Popup.prototype.options.autoPanPaddingBottomRight = L.point(!narrow() && !app.classList.contains("panel-closed") ? 392 : 16, narrow() ? 120 : 140);
+    L.Popup.prototype.options.maxHeight = Math.max(200, Math.min(460, (app.clientHeight || innerHeight) - (narrow() ? 230 : 210)));
+  };
+  padPopups();
+  if (narrow()) setPanel(false);
+  addEventListener("resize", () => { fitApp(); padPopups(); });
+  fitApp(); padPopups();
   [["counties", 250], ["soil", 300], ["hydro", 330], ["water", 420]].forEach(([n, z]) => { map.createPane(n); map.getPane(n).style.zIndex = z; });
   const canvasSoil = L.canvas({ pane: "soil", padding: 0.2 });
   const base = {
@@ -382,7 +404,7 @@
   }
   $("#water-list").addEventListener("click", (ev) => {
     const b = ev.target.closest("button"), f = b && $("#water-list").shown[b.dataset.w]; if (!f) return;
-    map.fitBounds(f.layer.getBounds(), { maxZoom: 15 }); sampleWater(f, f.layer.getBounds().getCenter());
+    closeOnPhone(); map.fitBounds(f.layer.getBounds(), { maxZoom: 15 }); sampleWater(f, f.layer.getBounds().getCenter());
   });
   async function sampleWater(f, at) {
     sampleLayer.clearLayers();
@@ -757,14 +779,13 @@
   const goTo = (e) => {
     const open = () => e.marker.openPopup();
     if (e.type === "place") sitesLayer.zoomToShowLayer(e.marker, open); else { map.setView([e.lat, e.lng], Math.max(map.getZoom(), 12)); open(); }
-    $("#map").scrollIntoView({ behavior: "smooth", block: "center" });
+    closeOnPhone();
   };
   $("#list").addEventListener("click", (ev) => { const b = ev.target.closest("button"); if (b) goTo(visibleEnts()[b.dataset.i]); });
   $("#saved-list").addEventListener("click", (ev) => { const b = ev.target.closest("button"); if (b) goTo(saved[b.dataset.s]); });
   $("#best-list").addEventListener("click", (ev) => {
     const b = ev.target.closest("button"), r = $("#best-list").ranked; if (!b || !r) return;
-    const c = r[b.dataset.b].c; map.setView([c.lat, c.lng], 10); pick(c.lat, c.lng);
-    $("#map").scrollIntoView({ behavior: "smooth", block: "center" });
+    const c = r[b.dataset.b].c; closeOnPhone(); map.setView([c.lat, c.lng], 10); pick(c.lat, c.lng);
   });
 
   function setDate(d) { date = d < MIN ? MIN : d > MAX ? MAX : d; render(); }

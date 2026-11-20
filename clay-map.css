@@ -169,3 +169,72 @@ body { --ink: var(--text); --line: var(--border); --radius: 14px; }
   .notice { font-size: .8rem; padding: 8px 12px; }
   .search input { flex-basis: 100%; }
 }
+
+/* ================= Full-screen map app ================= */
+.map-page .site-header { position: relative; }
+.map-app { position: relative; height: calc(100vh - var(--hdr, 65px)); height: calc(100dvh - var(--hdr, 65px)); min-height: 420px; overflow: hidden; }
+.map-app #map { position: absolute; inset: 0; height: auto !important; border: 0; border-radius: 0; z-index: 0; }
+.fl-card { background: color-mix(in srgb, var(--bg) 94%, transparent); border: 1px solid var(--border); border-radius: 14px;
+           box-shadow: 0 4px 18px rgb(15 35 50 / .16); backdrop-filter: blur(6px); }
+
+/* search, top left */
+.map-app .finder { position: absolute; top: 12px; left: 12px; z-index: 1001; width: min(400px, calc(100% - 24px)); padding: 6px; margin: 0; }
+.map-app .search { gap: 6px; flex-wrap: nowrap; }
+.map-app .search input { flex: 1 1 auto; min-width: 0; padding: 8px 14px; }
+.map-app .chip.icon { padding: 6px 11px; font-size: 1rem; line-height: 1; }
+.map-app .results { left: 6px; right: 6px; top: 100%; min-width: 0; }
+.map-page .leaflet-top.leaflet-left { top: 64px; }
+
+/* date dock, bottom */
+.map-app .datebar { position: absolute; left: 12px; right: 386px; bottom: 26px; z-index: 1000; margin: 0; padding: 10px 14px 8px; max-width: 880px; }
+.map-app .datebar-top { gap: 6px; }
+.map-app .datebar input[type=date] { padding: 5px 8px; }
+.map-app .datebar .chip { padding: 5px 11px; }
+.map-app .datebar input[type=range] { margin: 8px 0 0; }
+.map-app .season { margin: 4px 0 0; font-size: .82rem; color: var(--muted); }
+.map-page .leaflet-bottom.leaflet-left { bottom: 0; }
+
+/* side panel, right */
+.map-app .side { position: absolute; top: 12px; right: 12px; bottom: 12px; width: 360px; z-index: 1002; overflow-y: auto; max-height: none;
+                 padding: 14px 16px; transition: transform .25s ease, opacity .25s; }
+.panel-head { display: flex; justify-content: space-between; align-items: start; gap: 10px; margin-bottom: 8px; }
+.panel-head h1 { font-size: 1.25rem; margin: 0; line-height: 1.2; }
+.panel-close { border: 0; background: none; font-size: 1.1rem; color: var(--muted); cursor: pointer; padding: 2px 6px; }
+.panel-close:hover { color: var(--text); }
+.map-app .side .notice { margin: 0 0 8px; font-size: .8rem; }
+.panel-toggle { position: absolute; top: 12px; right: 12px; z-index: 1001; padding: 8px 14px; font: 600 .85rem "DM Sans", sans-serif; color: var(--text); cursor: pointer; display: none; }
+.panel-toggle .pt-open { display: none; }
+.map-app.panel-closed .side { transform: translateX(calc(100% + 24px)); opacity: 0; pointer-events: none; }
+.map-app.panel-closed .panel-toggle { display: block; }
+.map-app.panel-closed .datebar { right: 12px; }
+.map-app .zoom-hint { top: 72px; }
+
+/* page below the map */
+.map-page .refs { padding-top: 32px; }
+
+/* phones and small tablets: panel becomes a bottom sheet */
+@media (max-width: 760px) {
+  .map-app .finder { top: 8px; left: 8px; width: calc(100% - 16px); }
+  .map-page .leaflet-top.leaflet-left { top: 58px; }
+  .map-app .datebar { left: 8px; right: 8px !important; bottom: 20px; padding: 8px 10px 6px; }
+  .map-app .datebar .chip { padding: 4px 9px; font-size: .78rem; }
+  .map-app .datebar #nextgood, .map-app .date-note, .map-app .season, .map-app .slider-ends #live-label { display: none; }
+  .map-app .side { top: auto; left: 0; right: 0; bottom: 0; width: auto; max-height: 72%; border-radius: 16px 16px 0 0; }
+  .map-app.panel-closed .side { transform: translateY(105%); }
+  .panel-toggle { top: 58px; right: 8px; }
+  .map-app .zoom-hint { top: 104px; }
+}
+.leaflet-popup-content { margin: 14px 16px; }
+.leaflet-popup-scrolled { overflow-y: auto; border: 0; padding-right: 4px; }
+@media (max-width: 760px) {
+  /* compact one-row header on the map page */
+  .map-page .site-header { flex-direction: row; align-items: center; justify-content: space-between; padding: 8px 12px; gap: 8px; }
+  .map-page .site-header .wm-sub { display: none; }
+  .map-page .site-header .wm-name { font-size: 1.15rem; }
+  .map-page .site-header .nav { gap: 12px; border: 0; padding: 0; margin: 0; width: auto; }
+  .map-page .site-header .nav a { font-size: .85rem; padding: 0; }
+  .map-app .zoom-hint { top: auto; bottom: 118px; font-size: .75rem; }
+  .map-app .datebar input[type=date] { font-size: .85rem; padding: 4px 6px; }
+  .map-app .slider-ends { display: none; }
+}
+@media (max-width: 760px) { .map-app .zoom-hint { bottom: 132px; } .map-app .datebar { padding-bottom: 4px; } .map-app .datebar input[type=range] { margin-top: 6px; } }
