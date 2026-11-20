@@ -5,13 +5,17 @@
 (async function () {
   const $ = (s) => document.querySelector(s);
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-  const get = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
+  const hostOf = (u) => { try { return new URL(u).host; } catch (e) { return u; } };
+  const get = (u) => fetch(u).catch(() => { throw new Error("Couldn't reach " + hostOf(u)); })
+    .then((r) => { if (!r.ok) throw new Error("HTTP " + r.status + " from " + hostOf(u)); return r.json(); });
+  const safeUrl = (u) => (/^https?:\/\//.test(u || "") ? u : "#");
   const safe = (fn) => { try { return fn(); } catch (e) { return null; } };
 
-  let SHOP = {}, SITES = [], COUNTIES = null;
+  let SHOP = {}, SITES = [], COUNTIES = null, COMMUNITY = { groups: [], guides: [], rules: [] };
   try { SHOP = await get("store.json"); } catch (e) {}
   try { SITES = (await get("content/clay-sites.json")).sites || []; } catch (e) {}
   try { COUNTIES = await get("content/ny-counties.json"); } catch (e) {}
+  try { COMMUNITY = await get("content/clay-community.json"); } catch (e) {}
   if (SHOP.name) document.title = "New York Clay Soil Map | " + SHOP.name;
   $("#suggest").href = "mailto:" + (SHOP.contactEmail || "") + "?subject=" + encodeURIComponent("Clay map suggestion");
   if (SHOP.shopOpen) document.querySelectorAll("[data-shop-nav]").forEach((a) => (a.hidden = false));
@@ -248,7 +252,7 @@
   const loadSaved = () => safe(() => JSON.parse(localStorage.getItem("claySpots"))) || [];
   const storeSaved = () => safe(() => localStorage.setItem("claySpots", JSON.stringify(saved.map(({ name, lat, lng, county }) => ({ name, lat, lng, county })))));
   const saved = loadSaved().map((s) => ({ ...s, w: null, soil: null, kind: "region", type: "saved" }));
-  let picked = null, sel = null;
+  let picked = null, sel = null, weatherError = "";
   const everything = () => [...ents, ...saved];
 
   const pinIcon = (e, key) => L.divIcon({
@@ -272,7 +276,7 @@
       ${m.tmax != null ? `<dt>Air high / low</dt><dd>${F(m.tmax).toFixed(0)}° / ${F(m.tmin).toFixed(0)}°F</dd>` : ""}</dl>`;
     const geo = geoOf(e.county || countyAt(e.lat, e.lng));
     const head = e.type === "place"
-      ? `<span class="tag ${e.kind === "restricted" ? "restricted" : ""}">${esc(accessLabel[e.access] || "Permission needed")}</span><h3>${esc(e.name)}</h3><div>${esc(e.county)} County</div><p>${esc(e.notes)}</p>`
+      ? `<span class="tag ${e.kind === "restricted" ? "restricted" : ""}">${esc(accessLabel[e.access] || "Permission needed")}</span><h3>${esc(e.name)}</h3><div>${esc(e.county)} County</div><p>${esc(e.notes)}</p>${e.source ? `<p class="src">${/^https?:\/\//.test(e.source) ? `<a href="${esc(e.source)}" target="_blank" rel="noopener">Source</a>` : "Source: " + esc(e.source)}</p>` : ""}`
       : `<span class="tag">${kindText(e)}</span><h3>${esc(e.name || (e.county ? e.county + " County spot" : "Selected spot"))}</h3><div>${e.county ? esc(e.county) + " County · " : ""}${e.lat.toFixed(4)}, ${e.lng.toFixed(4)}</div>`;
     const actions = `<div class="popup-actions">
       ${e.type === "pick" ? `<button type="button" data-act="save">Save this spot</button>` : ""}
@@ -344,7 +348,7 @@
     picked.marker.on("popupopen", () => { select(picked); fillSoil(picked); });
     if (open) picked.marker.openPopup();
     const mine = picked;
-    try { [mine.w] = await loadWeather([mine], { past: PAST, future: FUTURE }); } catch (err) { mine.w = null; }
+    try { [mine.w] = await loadWeather([mine], { past: PAST, future: FUTURE }); } catch (err) { mine.w = null; weatherError = err.message; }
     if (picked !== mine) return;
     mine.marker.setIcon(pinIcon(mine, condFor(mine, date).key));
     refreshPopup(mine); drawSelection(); updateStatus();
@@ -419,6 +423,7 @@
       countyW[d] = map_;
       if (token === countyToken) { st.textContent = ""; paintCounties(); renderSummary(); updateStatus(); }
     } catch (err) {
+      weatherError = err.message;
       if (token === countyToken) { st.className = "status"; st.textContent = "using estimates"; }
       updateStatus();
     }
@@ -502,7 +507,9 @@
     $("#data-status").className = "data-status " + (live ? "live" : "est");
     $("#data-status").innerHTML = live
       ? "<strong>Live weather connected.</strong> Colors use real soil and rain data where available."
-      : "<strong>Showing estimates.</strong> Live weather isn't reachable, so colors show typical conditions for this date from my own climate model.";
+      : "<strong>Showing estimates.</strong> Live weather isn't reachable, so colors show typical conditions for this date from my own climate model." +
+        (weatherError ? `<span class="detail">Technical detail: ${esc(weatherError)}</span>` : "") + `<button type="button" id="retry-live">Retry</button>`;
+    const rb = $("#retry-live"); if (rb) rb.onclick = retryLive;
   }
   const listHtml = (arr, attr) => arr.map((e, i) =>
     `<li><button data-${attr}="${i}"><span class="row"><span class="dot" style="background:${STATES[e.cond].color}"></span><strong>${esc(e.name)}</strong></span><span class="state">${esc(e.county || "")}${e.county ? " County · " : ""}${esc(STATES[e.cond].label)}</span></button></li>`).join("");
@@ -543,17 +550,133 @@
   $("#back7").addEventListener("click", () => setDate(iso(addDays(parse(date), -7))));
   $("#fwd7").addEventListener("click", () => setDate(iso(addDays(parse(date), 7))));
 
-  render();
-  queueCounties();
-  const mine = everything();
-  if (mine.length) {
-    try { const ws = await loadWeather(mine, { past: PAST, future: FUTURE }); mine.forEach((e, i) => (e.w = ws[i])); }
-    catch (err) { $("#summary").textContent = "Live weather data is unavailable right now."; }
+  async function loadMine() {
+    const mine = everything(); if (!mine.length) return;
+    try { const ws = await loadWeather(mine, { past: PAST, future: FUTURE }); mine.forEach((e, i) => (e.w = ws[i])); weatherError = ""; }
+    catch (err) { weatherError = err.message; }
     render();
   }
+  function retryLive() { weatherError = ""; countyW = {}; $("#data-status").textContent = "Retrying…"; loadCounties(); loadMine(); }
+
+  render();
+  queueCounties();
+  loadMine();
   // Open a shared spot
   const sl = parseFloat(hashParams.get("lat")), sg = parseFloat(hashParams.get("lng"));
   if (isFinite(sl) && isFinite(sg)) { map.setView([sl, sg], 11); pick(sl, sg); }
+
+  // ---------- Potters and wild clay groups ----------
+  const communityLayer = L.layerGroup().addTo(map);
+  (COMMUNITY.groups || []).filter((g) => g.lat != null && g.lng != null).forEach((g) => {
+    L.marker([g.lat, g.lng], { title: g.name, icon: L.divIcon({ className: "", iconSize: [16, 16], iconAnchor: [8, 8], html: '<div class="pin community"></div>' }) })
+      .addTo(communityLayer)
+      .bindPopup(`<span class="tag">Potters &amp; wild clay</span><h3>${esc(g.name)}</h3><div>${esc(g.place)}</div><p>${esc(g.what)}</p><p class="src"><a href="${esc(safeUrl(g.url))}" target="_blank" rel="noopener">Visit their page</a></p><p class="small">The pin marks the town, not the studio's address.</p>`);
+  });
+  $("#lyr-community").addEventListener("change", (e) => (e.target.checked ? communityLayer.addTo(map) : map.removeLayer(communityLayer)));
+  const refList = (arr, sel, withPlace) => { $(sel).innerHTML = (arr || []).map((x) =>
+    `<li><a href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener">${esc(x.name || x.title)}</a><span>${withPlace && x.place ? esc(x.place) + ". " : ""}${esc(x.what || x.note)}</span></li>`).join(""); };
+  refList(COMMUNITY.groups, "#refs-groups", true); refList(COMMUNITY.guides, "#refs-guides"); refList(COMMUNITY.rules, "#refs-rules");
+
+  // ---------- Stream and lake soil explorer ----------
+  // Zoom in and every mapped stream, river, canal, lake and pond in view is loaded from OpenStreetMap.
+  // Click one and the USDA soil survey is sampled at points along it.
+  const waterLayer = L.layerGroup(), sampleLayer = L.layerGroup().addTo(map);
+  let waterFeats = [], waterKey = "", waterTimer = null, waterOn = false, waterPopup = null;
+  const CLAY_CLASSES = [
+    { min: 40, color: "#7a4a2a", name: "Heavy clay" }, { min: 27, color: "#c08a4e", name: "Clay / clay loam" },
+    { min: 15, color: "#e2c58f", name: "Loam" }, { min: 0, color: "#efe9dc", name: "Low clay" },
+  ];
+  const clayClass = (c) => (c == null ? null : CLAY_CLASSES.find((x) => c >= x.min));
+  const cap = (t) => (t ? t[0].toUpperCase() + t.slice(1) : "");
+  const waterMinZoom = 11;
+
+  async function loadWater() {
+    if (!waterOn) return;
+    const st = $("#water-status");
+    if (map.getZoom() < waterMinZoom) { st.className = "status"; st.textContent = "zoom in to load"; waterLayer.clearLayers(); waterFeats = []; waterKey = ""; renderWaterList(); return; }
+    const b = map.getBounds(), key = [b.getSouth(), b.getWest(), b.getNorth(), b.getEast()].map((x) => x.toFixed(2)).join(",");
+    if (key === waterKey) return;
+    waterKey = key; st.className = "status"; st.textContent = "loading…";
+    const bbox = [b.getSouth(), b.getWest(), b.getNorth(), b.getEast()].join(",");
+    const q = `[out:json][timeout:25];(way["waterway"~"^(river|stream|canal)$"](${bbox});way["natural"="water"](${bbox}););out geom tags 700;`;
+    try {
+      const res = await fetch("https://overpass-api.de/api/interpreter", { method: "POST", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: "data=" + encodeURIComponent(q) });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      drawWater((await res.json()).elements || []); st.textContent = "";
+    } catch (err) { waterKey = ""; st.className = "status err"; st.textContent = "unavailable right now"; }
+  }
+  function drawWater(els) {
+    waterLayer.clearLayers(); waterFeats = [];
+    els.forEach((el) => {
+      if (!el.geometry || el.geometry.length < 2) return;
+      const t = el.tags || {}, coords = el.geometry.map((p) => [p.lat, p.lon]);
+      const isLake = t.natural === "water" && coords.length > 3;
+      const kind = isLake ? cap(t.water || "lake") : cap(t.waterway || "stream");
+      const f = { name: t.name || "", kind, isLake, coords };
+      f.layer = isLake
+        ? L.polygon(coords, { color: "#2b7cb3", weight: 1.5, fillColor: "#7fb8de", fillOpacity: 0.45 })
+        : L.polyline(coords, { color: "#1f6fa5", weight: 3, opacity: 0.9 });
+      f.layer.bindTooltip(`<span class="water-tip"><strong>${esc(f.name || kind + " (unnamed)")}</strong><br>Click to check the soil</span>`, { sticky: true });
+      f.layer.on("click", (ev) => { L.DomEvent.stop(ev); sampleWater(f, ev.latlng); });
+      f.layer.addTo(waterLayer); waterFeats.push(f);
+    });
+    renderWaterList();
+  }
+  function renderWaterList() {
+    const named = waterFeats.filter((f) => f.name);
+    const seen = new Set(), list = named.filter((f) => !seen.has(f.name + f.kind) && seen.add(f.name + f.kind)).sort((a, b) => a.name.localeCompare(b.name)).slice(0, 40);
+    $("#water-count").textContent = waterFeats.length ? `(${waterFeats.length} mapped, ${list.length} named shown)` : "";
+    $("#water-list").innerHTML = list.length ? list.map((f, i) => `<li><button data-w="${i}"><strong>${esc(f.name)}</strong><span class="state">${esc(f.kind)}</span></button></li>`).join("")
+      : `<li class="tiny muted">${map.getZoom() < waterMinZoom ? "Zoom in to see streams and lakes." : "No named streams or lakes in this view."}</li>`;
+    $("#water-list").shown = list;
+  }
+  $("#water-list").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button"), f = b && $("#water-list").shown[b.dataset.w]; if (!f) return;
+    map.fitBounds(f.layer.getBounds(), { maxZoom: 15 }); sampleWater(f, f.layer.getBounds().getCenter());
+  });
+
+  async function sampleWater(f, at) {
+    sampleLayer.clearLayers();
+    const n = Math.min(8, f.coords.length), pts = Array.from({ length: n }, (_, i) => f.coords[Math.round((i * (f.coords.length - 1)) / Math.max(1, n - 1))]);
+    const title = esc(f.name || f.kind + " (unnamed)"), county = countyAt(pts[0][0], pts[0][1]), geo = geoOf(county);
+    const head = `<span class="tag">${f.isLake ? "Lake / pond" : esc(f.kind)}</span><h3>${title}</h3>${county ? `<div>${esc(county)} County</div>` : ""}`;
+    const foot = `${geo ? `<p class="sub">Regional clay potential</p><div class="cond">${POT_LABEL[geo.pot]} <span class="muted">(my estimate)</span></div><div class="small">${esc(geo.note)}</div>` : ""}
+      <div class="popup-actions"><a href="https://www.google.com/maps?q=${pts[Math.floor(n / 2)][0]},${pts[Math.floor(n / 2)][1]}" target="_blank" rel="noopener">Directions</a></div>
+      <p class="small">Check who owns the bank and ask first. Parks and state land usually forbid digging.</p>`;
+    waterPopup = L.popup({ maxWidth: 320 }).setLatLng(at).setContent(`${head}<p class="small">Sampling the soil survey at ${n} points…</p>${foot}`).openOn(map);
+    const results = await Promise.all(pts.map((p) => loadSoil(p[0], p[1]).catch(() => "err")));
+    results.forEach((r, i) => {
+      const c = r && r !== "err" ? clayClass(r.clay) : null;
+      L.circleMarker(pts[i], { radius: 7, color: "#fff", weight: 2, fillColor: c ? c.color : "#9aa5ab", fillOpacity: 1 })
+        .bindTooltip(r && r !== "err" ? `${r.clay != null ? r.clay + "% clay" : "no clay value"} · ${r.muname || ""}` : "no soil data here").addTo(sampleLayer);
+    });
+    const ok = results.filter((r) => r && r !== "err" && r.clay != null);
+    let body;
+    if (!ok.length) {
+      body = `<p class="small">${results.every((r) => r === "err") ? "The USDA soil survey is unavailable right now." : "No soil survey values for these points (water, rock or built-up land)."}${geo ? " The regional estimate below still applies." : ""}</p>`;
+    } else {
+      const counts = CLAY_CLASSES.map((cc) => ok.filter((r) => clayClass(r.clay) === cc).length);
+      const avg = Math.round(ok.reduce((s2, r) => s2 + r.clay, 0) / ok.length);
+      const names = {}; ok.forEach((r) => { if (r.muname) names[r.muname] = (names[r.muname] || 0) + 1; });
+      const top = Object.entries(names).sort((a, b) => b[1] - a[1]).slice(0, 3).map(([k]) => esc(k));
+      const bar = CLAY_CLASSES.map((cc, i) => (counts[i] ? `<span style="width:${(counts[i] / ok.length) * 100}%;background:${cc.color}"></span>` : "")).join("");
+      const key = CLAY_CLASSES.map((cc, i) => (counts[i] ? `<span><i style="background:${cc.color}"></i>${cc.name} (${counts[i]})</span>` : "")).join("");
+      const clayish = counts[0] + counts[1];
+      body = `<p class="sub">Soil survey along it (${ok.length} of ${n} points)</p>
+        <div class="cond">Average ${avg}% clay · ${clayish} of ${ok.length} points are clay or clay loam</div>
+        <div class="soil-bar">${bar}</div><div class="soil-key">${key}</div>
+        <dl class="facts"><dt>Soils</dt><dd>${top.join("; ")}</dd></dl>
+        <p class="small">${clayish ? "Clay is most likely where the water undercuts a bank and exposes the soil below the topsoil." : "Mostly loamy or sandy soils here, so clay is less likely."} Fire a test tile before you rely on any clay you dig.</p>`;
+    }
+    if (waterPopup && waterPopup.isOpen()) waterPopup.setContent(head + body + foot);
+  }
+  $("#lyr-water").addEventListener("change", (e) => {
+    waterOn = e.target.checked;
+    $("#water-panel").hidden = !waterOn;
+    if (waterOn) { waterLayer.addTo(map); waterKey = ""; if (map.getZoom() < waterMinZoom) { map.setZoom(waterMinZoom); } loadWater(); }
+    else { map.removeLayer(waterLayer); sampleLayer.clearLayers(); $("#water-status").textContent = ""; }
+  });
+  map.on("moveend", () => { if (waterOn) { clearTimeout(waterTimer); waterTimer = setTimeout(loadWater, 500); } });
 
   // ---------- Optional overlays ----------
   const soilWms = L.tileLayer.wms("https://sdmdataaccess.sc.egov.usda.gov/Spatial/SDM.wms", {

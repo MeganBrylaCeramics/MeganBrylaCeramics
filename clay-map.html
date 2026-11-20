@@ -94,7 +94,9 @@
         <h2>Layers</h2>
         <label class="toggle"><input type="checkbox" id="lyr-counties" checked> Conditions by county <span class="status" id="county-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-sites" checked> Clay places</label>
-        <label class="toggle"><input type="checkbox" id="lyr-streams"> Streams &amp; lakes (USGS) <span class="status" id="streams-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-streams"> Every stream &amp; lake (USGS map) <span class="status" id="streams-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-water"> Stream &amp; lake soil explorer <span class="status" id="water-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-community" checked> Potters &amp; wild clay groups</label>
         <label class="toggle"><input type="checkbox" id="lyr-soil"> USDA soil map areas <span class="status" id="soil-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-mrds"> USGS clay mineral sites <span class="status" id="mrds-status"></span></label>
         <label class="toggle"><input type="checkbox" id="lyr-geo"> USGS geology <span class="status" id="geo-status"></span></label>
@@ -108,6 +110,12 @@
         </label>
         <p class="tiny muted" id="basemap-note"></p>
 
+        <div id="water-panel" hidden>
+          <h2>Streams &amp; lakes in view <span class="count" id="water-count"></span></h2>
+          <p class="tiny muted">Click a stream or lake (or one in this list) to sample the USDA soil along it.</p>
+          <ul id="water-list" class="place-list"></ul>
+        </div>
+
         <h2>Places <span class="count" id="count"></span></h2>
         <ul id="list" class="place-list"></ul>
 
@@ -116,6 +124,16 @@
         <ul id="saved-list" class="place-list"></ul>
         <p class="tiny muted">Know a good spot, or a correction? <a id="suggest">Email me</a>.</p>
       </aside>
+    </section>
+
+    <section id="community" class="refs" aria-labelledby="refs-title">
+      <h2 id="refs-title">Where potters talk about wild clay</h2>
+      <p class="muted refs-intro">I couldn't find a public database of exact digging spots, and people rarely publish them, since most good banks are on private land. These are the groups, programs and guides where New York potters actually share how and where to find clay. Ask them, and ask landowners.</p>
+      <div class="refs-grid">
+        <div><h3>Groups &amp; programs</h3><ul id="refs-groups"></ul></div>
+        <div><h3>Guides &amp; maps</h3><ul id="refs-guides"></ul></div>
+        <div><h3>Rules on state land</h3><ul id="refs-rules"></ul></div>
+      </div>
     </section>
   </main>
 

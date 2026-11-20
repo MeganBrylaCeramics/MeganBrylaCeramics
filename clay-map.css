@@ -94,3 +94,25 @@ body { --ink: var(--text); --line: var(--border); --radius: 14px; }
 .data-status { font-size: .82rem; padding: 8px 10px; border-radius: 8px; margin: 0 0 8px; line-height: 1.4; }
 .data-status.live { background: var(--green-soft); color: var(--green-soft-ink); }
 .data-status.est { background: #fbf0d6; color: #6b4d0f; }
+
+/* ---- explorer + references ---- */
+.refs { border-top: 1px solid var(--border); padding: 36px 0 24px; }
+.refs h2 { margin: 0 0 8px; }
+.refs-intro { max-width: 70ch; margin: 0 0 20px; }
+.refs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.refs-grid h3 { font-size: 1rem; margin: 0 0 10px; }
+.refs-grid ul { list-style: none; margin: 0; padding: 0; }
+.refs-grid li { margin-bottom: 14px; font-size: .9rem; line-height: 1.45; }
+.refs-grid li a { font-weight: 600; }
+.refs-grid li span { display: block; color: var(--muted); }
+@media (max-width: 860px) { .refs-grid { grid-template-columns: 1fr; } }
+.pin.community { background: #7b4ea3 !important; border-radius: 4px; width: 16px; height: 16px; }
+.water-tip { font: 500 .8rem "DM Sans", sans-serif; }
+.soil-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; margin: 6px 0; background: #e7e7e7; }
+.soil-bar span { display: block; height: 100%; }
+.soil-key { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .75rem; color: #6b7a83; }
+.soil-key i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 4px; }
+.leaflet-popup-content .src a { font-weight: 600; }
+.data-status .detail { display: block; margin-top: 4px; font-size: .75rem; opacity: .8; word-break: break-word; }
+.data-status button { all: unset; cursor: pointer; text-decoration: underline; font-weight: 600; margin-left: 6px; }
+.tiny { font-size: .82rem; line-height: 1.45; }

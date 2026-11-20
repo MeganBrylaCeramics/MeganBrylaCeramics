@@ -211,3 +211,42 @@ collections:
               - { name: "kind", label: "Type", widget: "select", options: ["region", "restricted"], default: "region" }
               - { name: "access", label: "Access", widget: "select", options: ["unknown", "permitted", "restricted"], default: "unknown" }
               - { name: "notes", label: "Notes", widget: "text" }
+              - { name: "source", label: "Source (link or name, optional)", widget: "string", required: false, hint: "Where this spot was reported, e.g. a link to a post or who told you." }
+
+      - name: "community"
+        label: "Potters and wild clay groups"
+        file: "content/clay-community.json"
+        fields:
+          - name: "groups"
+            label: "Groups and programs"
+            label_singular: "group"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.name}}"
+            fields:
+              - { name: "name", label: "Name", widget: "string" }
+              - { name: "place", label: "Place", widget: "string", required: false }
+              - { name: "what", label: "What they do", widget: "text" }
+              - { name: "url", label: "Link", widget: "string" }
+              - { name: "lat", label: "Latitude (optional, for a map pin)", widget: "number", value_type: "float", required: false }
+              - { name: "lng", label: "Longitude (optional)", widget: "number", value_type: "float", required: false }
+          - name: "guides"
+            label: "Guides and maps"
+            label_singular: "guide"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.title}}"
+            fields:
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "note", label: "What it covers", widget: "text" }
+              - { name: "url", label: "Link", widget: "string" }
+          - name: "rules"
+            label: "Rules"
+            label_singular: "rule"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.title}}"
+            fields:
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "note", label: "What it says", widget: "text" }
+              - { name: "url", label: "Link", widget: "string" }

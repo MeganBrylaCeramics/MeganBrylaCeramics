@@ -1,0 +1,94 @@
+{
+  "groups": [
+    {
+      "name": "Main Street Studio, Charlton",
+      "place": "Charlton, Saratoga County",
+      "what": "Community program \"An Expedition in Wild Clay\": digging historic local clay, with a follow-along option online.",
+      "url": "https://mainstreetcharlton.com/blogs/news/an-expedition-in-wild-clay",
+      "lat": 42.92, "lng": -73.98
+    },
+    {
+      "name": "Collar City Clay Guild",
+      "place": "Troy, Rensselaer County",
+      "what": "Capital Region potters' guild. A good place to ask who digs local clay.",
+      "url": "https://collarcityclayguild.com/",
+      "lat": 42.728, "lng": -73.692
+    },
+    {
+      "name": "Oki Doki Studio",
+      "place": "Germantown, Columbia County",
+      "what": "Studio mentioned by Scenic Hudson for workshops on wild clay and different firing methods.",
+      "url": "https://www.scenichudson.org/?p=67253",
+      "lat": 42.134, "lng": -73.892
+    },
+    {
+      "name": "River Valley Arts Collective, Claverack",
+      "place": "Claverack, Columbia County",
+      "what": "Ran a free 2023 wild clay workshop led by David Moldover of The Newburgh Pottery. Ask about future sessions.",
+      "url": "https://www.rvacollective.org/activities-all/2023-wild-clay",
+      "lat": 42.225, "lng": -73.755
+    },
+    {
+      "name": "Hudson River Potters",
+      "place": "Hudson Valley",
+      "what": "Informal group of 40+ potters. Membership is open and not juried.",
+      "url": "https://www.hudsonriverpotters.net/"
+    },
+    {
+      "name": "Wild Earth: Wild Pottery series",
+      "place": "Workshop series",
+      "what": "Courses on finding and processing wild clay, then hand-building and firing.",
+      "url": "https://wildearth.org/adults/wild-pottery-series"
+    },
+    {
+      "name": "MoCA/NY: Wild Clay",
+      "place": "New York City",
+      "what": "A wild clay event write-up from the Museum of Chinese in America's New York programs.",
+      "url": "https://explore.moca-ny.org/2023/07/27/wild-clay/"
+    }
+  ],
+  "guides": [
+    {
+      "title": "Hudson River lake clay exposures (NY State Museum)",
+      "note": "Explains glacial Lake Albany and where its clay is exposed along the modern Hudson banks.",
+      "url": "https://nysm.nysed.gov/research-collections/geology/resources/hudson-river-lake-clay-exposures"
+    },
+    {
+      "title": "Scenic Hudson: wild clay in the Hudson Valley",
+      "note": "Potters digging local clay, advice to follow the water, and a reminder that digging on public land is usually not legal.",
+      "url": "https://www.scenichudson.org/?p=67253"
+    },
+    {
+      "title": "Ceramics Monthly: Wild clay and glaze",
+      "note": "Testing and using wild clay. It is often gritty and short, so test before committing.",
+      "url": "https://ceramicartsnetwork.org/ceramics-monthly/ceramics-monthly-article/wild-clay-and-glaze"
+    },
+    {
+      "title": "Pottery Making Illustrated: Processing natural clays",
+      "note": "How to clean up and prepare clay you have dug.",
+      "url": "https://ceramicartsnetwork.org/pottery-making-illustrated/pottery-making-illustrated-article/In-the-Studio-Processing-Natural-Clays"
+    },
+    {
+      "title": "Low Impact: Pottery on the wild side",
+      "note": "A beginner's guide to digging your own clay, including asking landowners first.",
+      "url": "https://www.lowimpact.org/pottery-digging-your-own-clay/"
+    },
+    {
+      "title": "USGS: Surficial geology of New York (Cadwell and others, 1991)",
+      "note": "The statewide glacial deposits map as a GIS geodatabase, for finding lake-bed clay plains.",
+      "url": "https://www.usgs.gov/data/a-geodatabase-representing-a-compilation-cadwell-dh-and-others-1991-surficial-geology-new-york"
+    }
+  ],
+  "rules": [
+    {
+      "title": "6 NYCRR 51.8: state land rules",
+      "note": "Bars removing or disturbing rock, soil, fossils or minerals on DEC-managed land without a written permit.",
+      "url": "https://www.law.cornell.edu/regulations/new-york/6-NYCRR-51.8"
+    },
+    {
+      "title": "ECL 9-0303: taking material from state lands",
+      "note": "No taking material belonging to the state off state lands without authorization.",
+      "url": "https://newyork.public.law/laws/n.y._environmental_conservation_law_section_9-0303"
+    }
+  ]
+}

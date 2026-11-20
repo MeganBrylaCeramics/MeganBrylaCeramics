@@ -27,6 +27,8 @@ The Shop, Payments and Cart are hidden for now. When you're ready, open `/admin/
 `clay-map.html` is a New York clay soil map that changes with the date (past 3 months to 2 weeks ahead):
 - **Counties colored by conditions** (good, too wet, dry, frozen). It uses live soil temperature, soil moisture, snow and rain (Open-Meteo) when it can reach them, and otherwise **my own climate model** (typical conditions for that date and location), so the map is never empty.
 - **Color the counties three ways:** digging conditions, clay potential (a rough estimate from general glacial geology), or best bets (both combined), plus a ranked *Best bets on this date* list.
+- **Stream & lake soil explorer:** zoom in and every mapped stream, river, canal, lake and pond in view is loaded (OpenStreetMap). Click one, or pick it from the list, and the USDA soil survey is sampled at points along it, with average clay %, soil names and a regional note.
+- **Potters & wild clay groups:** map pins and a references section (guilds, workshops, guides, state land rules). Edit them in `/admin/` under *Potters and wild clay groups*.
 - **Terrain map with streams** (OpenTopoMap, USGS topo) and an optional USGS streams and lakes overlay.
 - **Tap anywhere in New York** for conditions at that exact spot plus USDA soil survey data (clay, silt and sand %, drainage), a 3-month timeline, and the next good digging day.
 - **Search a town**, or use your location.
