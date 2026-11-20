@@ -24,20 +24,19 @@ Click **Publish**. The live site updates in about a minute.
 The Shop, Payments and Cart are hidden for now. When you're ready, open `/admin/`, tick **Shop is open**, and publish. Everything below still applies.
 
 ## Clay soil map
-`clay-map.html` is a New York clay soil map that changes with the date (past 3 months to 2 weeks ahead):
-- **Counties colored by conditions** (good, too wet, dry, frozen). It uses live soil temperature, soil moisture, snow and rain (Open-Meteo) when it can reach them, and otherwise **my own climate model** (typical conditions for that date and location), so the map is never empty.
-- **Color the counties three ways:** digging conditions, clay potential (a rough estimate from general glacial geology), or best bets (both combined), plus a ranked *Best bets on this date* list.
-- **Stream & lake soil explorer:** zoom in and every mapped stream, river, canal, lake and pond in view is loaded (OpenStreetMap). Click one, or pick it from the list, and the USDA soil survey is sampled at points along it, with average clay %, soil names and a regional note.
-- **Potters & wild clay groups:** map pins and a references section (guilds, workshops, guides, state land rules). Edit them in `/admin/` under *Potters and wild clay groups*.
-- **Terrain map with streams** (OpenTopoMap, USGS topo) and an optional USGS streams and lakes overlay.
-- **Tap anywhere in New York** for conditions at that exact spot plus USDA soil survey data (clay, silt and sand %, drainage), a 3-month timeline, and the next good digging day.
-- **Search a town**, or use your location.
-- **Save spots** on your own device, **copy a link** to a spot and date, and get **directions**.
-- Optional layers: USDA soil map areas, USGS clay mineral sites and USGS geology.
+`clay-map.html` is a New York clay map built on real data. Every source below was tested against the live service.
 
-The map lists 36 places in four types, filterable and clustered: clay regions, **historic brick-making towns**, **geology maps and clay lowlands** (NY State Museum surficial map sheets and the Champlain, St. Lawrence and Great Lakes plains) and places **reported in stream plans**. None are verified digging spots. Add your own in `/admin/` under *Clay map places*.
+| Layer | Source | Notes |
+|---|---|---|
+| **Soil clay map** | USDA NRCS Soil Data Access (SSURGO) | Real soil survey areas colored by clay %, loaded for the view at zoom 13+ |
+| **Streams & lakes** | USGS National Hydrography Dataset | Every mapped stream, river, lake and pond at zoom 12+. Streams and shores that run through clay soil (27%+ clay) are drawn in orange. Click one for the soils along it. |
+| **USGS clay pits** | USGS Mineral Resources Data System | 124 New York clay pits and records, bundled in `content/usgs-clay-sites.json` |
+| **Digging conditions** | Open-Meteo, plus my own climate model | One request per visit, cached for 3 hours. Live weather covers a month back and 2 weeks ahead; other dates (half a year either way) use typical conditions. |
+| **Clay places, groups, references** | `content/*.json`, edited in `/admin/` | Historic brick towns, NYS Museum surficial map sheets, potters' groups, guides and rules |
 
-The ratings are a rough guide from modeled weather, not a field check. Add or edit the clay places in `/admin/` under *Clay map places*.
+Tap anywhere for that spot's conditions, soil survey, county clay potential and a 1-year timeline. You can also search a town, save spots on your device and share a link to a spot and date.
+
+The condition ratings and county clay potential are rough guides, not field checks. Never dig without the landowner's permission.
 
 ## Taking payments (all free to run)
 | Method | What happens |

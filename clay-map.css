@@ -129,3 +129,43 @@ body { --ink: var(--text); --line: var(--border); --radius: 14px; }
 .key-line .k-dot { border-radius: 50%; margin-left: 0; } .key-line .k-sq { border-radius: 3px; }
 .key-line .k-tri { clip-path: polygon(50% 0, 100% 100%, 0 100%); } .key-line .k-ring { border-radius: 50%; background: none; border: 2px solid #7b4ea3; width: 7px; height: 7px; }
 .marker-cluster div { font: 700 .8rem "DM Sans", sans-serif; }
+
+/* ---- v2: collapsible sidebar, zoom hint, soil legend, USGS clusters ---- */
+.side details { border-bottom: 1px solid var(--border); padding: 10px 0; }
+.side details:first-child { padding-top: 0; }
+.side summary { cursor: pointer; font: 600 1.02rem Fraunces, Georgia, serif; list-style: none; display: flex; align-items: baseline; gap: 6px; }
+.side summary::-webkit-details-marker { display: none; }
+.side summary::before { content: "▸"; font-size: .8rem; color: var(--muted); transition: transform .15s; display: inline-block; }
+.side details[open] > summary::before { transform: rotate(90deg); }
+.side details > *:not(summary):first-of-type { margin-top: 10px; }
+.side .field { margin-top: 10px; }
+.map-col { position: relative; }
+.zoom-hint { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 500; background: rgb(29 43 51 / .85); color: #fff;
+             font: 600 .82rem "DM Sans", sans-serif; padding: 7px 14px; border-radius: 999px; pointer-events: none; opacity: 0; transition: opacity .2s; white-space: nowrap; }
+.zoom-hint.show { opacity: 1; }
+.soil-legend { display: grid; gap: 3px; margin-top: 10px; font-size: .8rem; color: var(--muted); }
+.soil-legend p { margin: 0 0 2px; }
+.soil-legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -2px; border: 1px solid rgb(0 0 0 / .12); }
+.usgs-cluster div { width: 30px; height: 30px; border-radius: 50%; background: #a0612e; color: #fff; border: 2px solid #fff; box-shadow: 0 1px 4px rgb(0 0 0 / .45);
+                    display: flex; align-items: center; justify-content: center; font: 700 .78rem "DM Sans", sans-serif; }
+.date-note { font-size: .85rem; color: var(--muted); }
+.results .pad { padding: 8px 12px; }
+.status.ok { color: var(--green); }
+.leaflet-container { font-family: "DM Sans", sans-serif; }
+@media (max-width: 860px) {
+  .datebar-top { gap: 8px; }
+  .datebar-top .chip { padding: 6px 10px; }
+  .zoom-hint { white-space: normal; text-align: center; width: max-content; max-width: 85%; }
+}
+.map-intro { padding: 28px 0 14px; }
+.map-intro h1 { margin-bottom: 8px; }
+.map-intro .lede { margin: 0 0 12px; }
+.notice { font-size: .86rem; padding: 10px 14px; }
+.datebar { padding: 12px 16px; margin-bottom: 16px; }
+@media (max-width: 600px) {
+  .map-intro { padding-top: 16px; }
+  .map-intro h1 { font-size: 1.6rem; }
+  .map-intro .lede, .map-intro .eyebrow { display: none; }
+  .notice { font-size: .8rem; padding: 8px 12px; }
+  .search input { flex-basis: 100%; }
+}
