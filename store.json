@@ -1,0 +1,299 @@
+{
+  "name": "Megan Bryla Ceramics",
+  "tagline": "Small-batch, wheel-thrown stoneware for everyday rituals. Each piece is made by hand, so no two are quite alike.",
+  "contactEmail": "mbryla2004@gmail.com",
+  "currency": "usd",
+  "payments": {
+    "stripe": {
+      "enabled": true,
+      "label": "Card / Apple Pay / Google Pay",
+      "description": "Secure checkout powered by Stripe. Each piece is paid for with its own card checkout."
+    },
+    "venmo": {
+      "enabled": true,
+      "label": "Venmo",
+      "username": "your-venmo-username"
+    },
+    "zelle": {
+      "enabled": true,
+      "label": "Zelle",
+      "recipientName": "Megan Bryla",
+      "emailOrPhone": "you@example.com"
+    },
+    "local": {
+      "enabled": true,
+      "label": "Pay in person",
+      "details": "Pay with cash or card when we meet. After you place your order, I'll email you to arrange a time."
+    }
+  },
+  "awards": [
+    {
+      "year": "2026",
+      "title": "Departmental Distinction",
+      "detail": "Environment, Sustainability & Society; French; and Art"
+    },
+    {
+      "year": "2023–2026",
+      "title": "Freedman Prize Research Project",
+      "detail": "Hartwick College"
+    },
+    {
+      "year": "2022–2026",
+      "title": "Dean's List",
+      "detail": "Hartwick College"
+    },
+    {
+      "year": "2025",
+      "title": "Juror's Choice",
+      "detail": "Student Juried Show"
+    },
+    {
+      "year": "2024",
+      "title": "Best in Ceramics",
+      "detail": "Student Juried Show"
+    },
+    {
+      "year": "2024",
+      "title": "Andrew B. Saxton Faculty Scholar for French",
+      "detail": "Hartwick College"
+    },
+    {
+      "year": "2023",
+      "title": "Best in Drawing",
+      "detail": "Student Juried Show"
+    },
+    {
+      "year": "2023",
+      "title": "Alfred F. Massari Language Memorial Award for French",
+      "detail": "Hartwick College"
+    }
+  ],
+  "exhibitions": [
+    {
+      "year": "2026",
+      "title": "Senior Thesis Exhibition",
+      "venue": "Foreman Gallery"
+    },
+    {
+      "year": "2025",
+      "title": "Student Juried Show, juried by Gregg Emery",
+      "venue": "Foreman Gallery"
+    },
+    {
+      "year": "2025",
+      "title": "Hartwick x SUNY Oneonta Student Show",
+      "venue": "Community Arts Network of Oneonta"
+    },
+    {
+      "year": "2025",
+      "title": "Concentrations Review",
+      "venue": "Foreman Gallery"
+    },
+    {
+      "year": "2024",
+      "title": "Student Juried Show",
+      "venue": "Foreman Gallery"
+    },
+    {
+      "year": "2024",
+      "title": "Foundations Review",
+      "venue": "Anderson Center for the Arts"
+    },
+    {
+      "year": "2023",
+      "title": "Student Juried Show",
+      "venue": "Foreman Gallery"
+    }
+  ],
+  "publications": [
+    {
+      "year": "2026",
+      "title": "Cooking in Clay: Cone 6 Flameware",
+      "venue": "Freedman Prize Research Project"
+    },
+    {
+      "year": "2025",
+      "title": "Material Science and Clay Cooking Pots",
+      "venue": "Freedman Prize Research Project"
+    }
+  ],
+  "pieces": [
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "internal-integrity-towers",
+      "title": "Internal Integrity (towers)",
+      "category": "Sculpture",
+      "year": "2026",
+      "materials": "White stoneware, slip, Mason stain, kintsugi · 34 × 6 in.",
+      "description": "Tall stacked stoneware towers, carved and repaired with kintsugi.",
+      "image": "images/work/internal-integrity-towers.jpg"
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "internal-integrity-installation",
+      "title": "Internal Integrity (installation)",
+      "category": "Sculpture",
+      "year": "2026",
+      "materials": "White stoneware, slip, Mason stain, kintsugi · column 19 × 8 in.",
+      "description": "Installation view of the Internal Integrity towers and column, shown together in the gallery.",
+      "image": "images/work/internal-integrity-installation.jpg"
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "illustrated",
+      "title": "Alone and Fed Up (Seul, Drama, and Frustration)",
+      "category": "Illustrated",
+      "year": "2025",
+      "materials": "White stoneware, underglaze, glaze · 6–6.5 × 3 in.",
+      "description": "Three cylinders drawn like comic panels, titled Seul, Drama and Frustration, with black line drawings of everyday scenes wrapping around each piece.",
+      "image": "images/illustrated-vases.jpg"
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "alone-and-fed-up-decal",
+      "title": "Alone and Fed Up (Decal Version)",
+      "category": "Illustrated",
+      "year": "2025",
+      "materials": "White stoneware, glaze, decals · 6 × 3 in.",
+      "description": "The Seul, Drama and Frustration cylinders made again with printed decals in place of hand-drawn underglaze.",
+      "image": "images/work/alone-and-fed-up-decal.jpg"
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "losing-all-control-glaze",
+      "title": "Losing All Control (Glaze Version)",
+      "category": "Sculpture",
+      "year": "2025",
+      "materials": "White stoneware, glaze, epoxy, gold mica powder · 6.75 × 5–6.75 in.",
+      "description": "Three glazed vessels broken open and mended with gold.",
+      "image": "images/work/losing-all-control-glaze.jpg"
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "losing-all-control-decal",
+      "title": "Losing All Control (Decal Version)",
+      "category": "Sculpture",
+      "year": "2025",
+      "materials": "White stoneware, glaze, decals, epoxy, gold mica powder · 6.5–7 × 5–6 in.",
+      "description": "White vessels with figure decals, broken open and mended with gold.",
+      "image": "images/work/losing-all-control-decal.jpg"
+    },
+    {
+      "id": "striped-lidded-jars",
+      "title": "Green and Blue Candy: Lidded Jars (Pair)",
+      "description": "From the Green and Blue Candy series: tall lidded jars in crackled turquoise and speckled cream, banded with brushed black slip stripes that carry up onto the knobbed lids.",
+      "category": "Vessels",
+      "image": "images/striped-lidded-jars.jpg",
+      "inShop": true,
+      "inPortfolio": true,
+      "price": 160.0,
+      "soldOut": false,
+      "year": "2025",
+      "materials": "White stoneware, black slip, glaze · 11.5 × 5 in. (blue), 14 × 4.5 in. (green)",
+      "stripeLink": ""
+    },
+    {
+      "id": "striped-vases",
+      "title": "Green and Blue Candy: Maebyeong-inspired Vases (Pair)",
+      "description": "From the Green and Blue Candy series: round-shouldered vases inspired by the Korean maebyeong form, in glossy turquoise and speckled cream with brushed stripes.",
+      "category": "Vessels",
+      "image": "images/striped-vases.jpg",
+      "inShop": true,
+      "inPortfolio": true,
+      "price": 110.0,
+      "soldOut": false,
+      "year": "2025",
+      "materials": "White stoneware, black slip, glaze · 10–10.5 × 6–6.5 in.",
+      "stripeLink": ""
+    },
+    {
+      "id": "flared-vases",
+      "title": "Green and Blue Candy: Cylinder Vases (Pair)",
+      "description": "From the Green and Blue Candy series: waisted cylinder vases with flared rims, in speckled cream and crackled turquoise with brushed black stripes.",
+      "category": "Vessels",
+      "image": "images/flared-vases.jpg",
+      "inShop": true,
+      "inPortfolio": true,
+      "price": 90.0,
+      "soldOut": false,
+      "year": "2025",
+      "materials": "White stoneware, black slip, glaze · 8.5–9 × 5 in.",
+      "stripeLink": ""
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "are-you-seeing-what-im-seeing",
+      "title": "Are You Seeing What I'm Seeing?",
+      "category": "Painting",
+      "year": "2024",
+      "materials": "Acrylic on masonite board · 18 × 27 in.",
+      "description": "A painted portrait framed by the title's question in bold hand-lettered text.",
+      "image": "images/work/are-you-seeing-what-im-seeing.jpg"
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "thoughts-and-prayers-installation",
+      "title": "Thoughts and Prayers (installation)",
+      "category": "Painting",
+      "year": "2025",
+      "materials": "Acrylic on masonite board, ink on standard paper · 7 × 6.5 ft. installation",
+      "description": "Wall installation of printed posters built around the Thoughts and Prayers painting.",
+      "image": "images/work/thoughts-and-prayers-installation.jpg"
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "thoughts-and-prayers-painting",
+      "title": "Thoughts and Prayers (painting)",
+      "category": "Painting",
+      "year": "2025",
+      "materials": "Acrylic on masonite board · 12 × 18 in.",
+      "description": "The painting at the center of the Thoughts and Prayers installation.",
+      "image": "images/work/thoughts-and-prayers-painting.jpg"
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "snap-installation",
+      "title": "SNAP (installation)",
+      "category": "Painting",
+      "year": "2025",
+      "materials": "Acrylic on masonite board, ink on paper · 7 × 7.75 ft.",
+      "description": "Wall installation of printed posters around the SNAP painting.",
+      "image": "images/work/snap-installation.jpg"
+    },
+    {
+      "inShop": false,
+      "inPortfolio": true,
+      "soldOut": false,
+      "id": "snap-painting",
+      "title": "SNAP (painting)",
+      "category": "Painting",
+      "year": "2025",
+      "materials": "Acrylic on masonite board · 14 × 21 in.",
+      "description": "Painted portrait set against a background of news text about SNAP benefits.",
+      "image": "images/work/snap-painting.jpg"
+    }
+  ],
+  "orderFormUrl": "",
+  "newsletterFormUrl": "",
+  "text": {}
+}

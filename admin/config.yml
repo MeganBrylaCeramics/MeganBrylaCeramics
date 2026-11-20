@@ -1,5 +1,4 @@
-# Sveltia CMS (Decap-compatible): the admin page at meganbrylaceramics.github.io/MeganBrylaCeramics/admin/
-# Change "repo" to your GitHub username/repository name.
+# Sveltia CMS (works like Decap CMS). Admin page: /admin/
 backend:
   name: github
   repo: MeganBrylaCeramics/MeganBrylaCeramics
@@ -7,51 +6,202 @@ backend:
   commit_messages:
     update: "Update {{slug}}"
 
-
-media_folder: "images"
-public_folder: "images"
-site_url: "/"
-display_url: "/"
+media_folder: "images/work"
+public_folder: "images/work"
 
 collections:
-  - name: "shop"
-    label: "Shop"
+  - name: "site"
+    label: "Website"
     editor: { preview: false }
     files:
-      - name: "products"
-        label: "🏺 Pieces for sale"
-        file: "content/products.json"
+      - name: "store"
+        label: "Pieces, settings & text"
+        file: "store.json"
         fields:
-          - name: "products"
-            label: "Pieces"
+          - name: "pieces"
+            label: "Pieces (shop + portfolio)"
             label_singular: "piece"
             widget: "list"
-            summary: "{{fields.name}}  ·  ${{fields.price}}  {{fields.sold}}"
-            collapsed: true
             add_to_top: true
+            collapsed: true
+            summary: "{{fields.title}}"
             fields:
-              - { name: "name", label: "Title", widget: "string" }
-              - { name: "price", label: "Price (USD)", widget: "number", value_type: "float", min: 0 }
-              - { name: "image", label: "Photo", widget: "image", required: false, choose_url: false,
-                  hint: "Square photos look best. Drag a photo in or click to upload." }
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "image", label: "Photo", widget: "image", required: false, choose_url: false, hint: "Drag a photo here or click to upload." }
+              - { name: "id", label: "ID (no spaces, e.g. blue-vase-1)", widget: "string", hint: "A short unique name. Do not change it after publishing." }
+              - { name: "category", label: "Category", widget: "string", required: false }
+              - { name: "year", label: "Year", widget: "string", required: false }
+              - { name: "materials", label: "Materials & size", widget: "string", required: false }
               - { name: "description", label: "Description", widget: "text", required: false }
-              - { name: "stripeLink", label: "Stripe Payment Link", widget: "string", required: false,
-                  hint: "Paste the https://buy.stripe.com/... link for this piece. Set 'limit payments' to 1 in Stripe." }
-              - { name: "sold", label: "Sold", widget: "boolean", default: false }
-              - { name: "localOnly", label: "Local pickup only (can't ship)", widget: "boolean", default: false }
-              - { name: "color", label: "Placeholder color (used only when there's no photo)", widget: "color", required: false, default: "#b9a58c" }
+              - { name: "inShop", label: "For sale in the Shop", widget: "boolean", default: false }
+              - { name: "price", label: "Price (USD)", widget: "number", value_type: "float", min: 0, required: false }
+              - { name: "stripeLink", label: "Stripe Payment Link (card payments)", widget: "string", required: false, hint: "Paste the https://buy.stripe.com/... link for this piece. In Stripe, set 'Limit the number of payments' to 1." }
+              - { name: "soldOut", label: "Sold out", widget: "boolean", default: false }
+              - { name: "inPortfolio", label: "Show in Portfolio", widget: "boolean", default: false }
+          - name: "text"
+            label: "Website wording (leave blank to keep the original)"
+            widget: "object"
+            collapsed: true
+            required: false
+            fields:
+              - { name: "home-eyebrow", label: "home-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: Ceramic artist \u00b7 Greater Binghamton, NY" }
+              - { name: "home-title", label: "home-title", widget: "text", required: false, hint: "Leave empty to keep: Hi, I'm Megan Bryla." }
+              - { name: "home-intro", label: "home-intro", widget: "text", required: false, hint: "Leave empty to keep: I'm a ceramic artist and a Hartwick College graduate with a triple major in Environment, Sustainability & Soci\u2026" }
+              - { name: "home-btn-work", label: "home-btn-work", widget: "text", required: false, hint: "Leave empty to keep: See my work" }
+              - { name: "home-btn-about", label: "home-btn-about", widget: "text", required: false, hint: "Leave empty to keep: More about me" }
+              - { name: "home-fact1-title", label: "home-fact1-title", widget: "text", required: false, hint: "Leave empty to keep: Hartwick College" }
+              - { name: "home-fact1-text", label: "home-fact1-text", widget: "text", required: false, hint: "Leave empty to keep: Class of 2026, triple major: Environment, Sustainability & Society, French & Art" }
+              - { name: "home-fact2-title", label: "home-fact2-title", widget: "text", required: false, hint: "Leave empty to keep: Juried shows" }
+              - { name: "home-fact2-text", label: "home-fact2-text", widget: "text", required: false, hint: "Leave empty to keep: Honored in juried art shows" }
+              - { name: "home-fact3-title", label: "home-fact3-title", widget: "text", required: false, hint: "Leave empty to keep: Commissions" }
+              - { name: "home-fact3-text", label: "home-fact3-text", widget: "text", required: false, hint: "Leave empty to keep: Open to custom work:" }
+              - { name: "home-fact3-link", label: "home-fact3-link", widget: "text", required: false, hint: "Leave empty to keep: get in touch" }
+              - { name: "work-eyebrow", label: "work-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: Selected work" }
+              - { name: "work-title", label: "work-title", widget: "text", required: false, hint: "Leave empty to keep: Portfolio" }
+              - { name: "available-eyebrow", label: "available-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: Take a piece home" }
+              - { name: "available-title", label: "available-title", widget: "text", required: false, hint: "Leave empty to keep: Available now" }
+              - { name: "available-link", label: "available-link", widget: "text", required: false, hint: "Leave empty to keep: See the whole shop \u2192" }
+              - { name: "shop-eyebrow", label: "shop-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: The current batch" }
+              - { name: "shop-title", label: "shop-title", widget: "text", required: false, hint: "Leave empty to keep: Shop" }
+              - { name: "shop-intro", label: "shop-intro", widget: "text", required: false, hint: "Leave empty to keep: Every piece is one of a kind. When it's gone, it's gone. Pay by card, Venmo, Zelle, or in person." }
+              - { name: "shop-intro-link", label: "shop-intro-link", widget: "text", required: false, hint: "Leave empty to keep: How to pay" }
+              - { name: "about-eyebrow", label: "about-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: About the artist" }
+              - { name: "about-title", label: "about-title", widget: "text", required: false, hint: "Leave empty to keep: Megan Bryla" }
+              - { name: "about-p1", label: "about-p1", widget: "text", required: false, hint: "Leave empty to keep: I'm a ceramic artist from the Greater Binghamton area of New York. I graduated from Hartwick College in 2026 w\u2026" }
+              - { name: "about-p2", label: "about-p2", widget: "text", required: false, hint: "Leave empty to keep: I throw every piece by hand on the wheel, then trim, glaze and fire it. I love glazes that pool and break over\u2026" }
+              - { name: "about-p3", label: "about-p3", widget: "text", required: false, hint: "Leave empty to keep: When I'm not at the wheel, I work in environmental conservation. As a Watershed Technician with the Upper Susq\u2026" }
+              - { name: "about-signature", label: "about-signature", widget: "text", required: false, hint: "Leave empty to keep: \u2014 Megan" }
+              - { name: "about-btn-work", label: "about-btn-work", widget: "text", required: false, hint: "Leave empty to keep: See my work" }
+              - { name: "about-btn-email", label: "about-btn-email", widget: "text", required: false, hint: "Leave empty to keep: Email me" }
+              - { name: "highlights-eyebrow", label: "highlights-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: Background" }
+              - { name: "highlights-title", label: "highlights-title", widget: "text", required: false, hint: "Leave empty to keep: Highlights" }
+              - { name: "highlight1-label", label: "highlight1-label", widget: "text", required: false, hint: "Leave empty to keep: Education" }
+              - { name: "highlight1-title", label: "highlight1-title", widget: "text", required: false, hint: "Leave empty to keep: Hartwick College" }
+              - { name: "highlight1-text", label: "highlight1-text", widget: "text", required: false, hint: "Leave empty to keep: Class of 2026. BAs in Studio Arts (Ceramics); Environment, Sustainability & Society; and French." }
+              - { name: "highlight2-label", label: "highlight2-label", widget: "text", required: false, hint: "Leave empty to keep: Recognition" }
+              - { name: "highlight2-title", label: "highlight2-title", widget: "text", required: false, hint: "Leave empty to keep: Juried show awards" }
+              - { name: "highlight2-text", label: "highlight2-text", widget: "text", required: false, hint: "Leave empty to keep: Best in Ceramics, Best in Drawing and Juror's Choice in Hartwick's student juried shows." }
+              - { name: "highlight3-label", label: "highlight3-label", widget: "text", required: false, hint: "Leave empty to keep: Abroad" }
+              - { name: "highlight3-title", label: "highlight3-title", widget: "text", required: false, hint: "Leave empty to keep: Senegal, Spain & France" }
+              - { name: "highlight3-text", label: "highlight3-text", widget: "text", required: false, hint: "Leave empty to keep: January Term study away, plus French study at the Institut de Touraine in Tours (2025)." }
+              - { name: "highlight4-label", label: "highlight4-label", widget: "text", required: false, hint: "Leave empty to keep: Conservation" }
+              - { name: "highlight4-title", label: "highlight4-title", widget: "text", required: false, hint: "Leave empty to keep: Watershed Technician" }
+              - { name: "highlight4-text", label: "highlight4-text", widget: "text", required: false, hint: "Leave empty to keep: Upper Susquehanna Coalition: wetland and water-quality restoration." }
+              - { name: "cv-awards-title", label: "cv-awards-title", widget: "text", required: false, hint: "Leave empty to keep: Awards & Honors" }
+              - { name: "cv-exhibitions-title", label: "cv-exhibitions-title", widget: "text", required: false, hint: "Leave empty to keep: Exhibitions" }
+              - { name: "cv-publications-title", label: "cv-publications-title", widget: "text", required: false, hint: "Leave empty to keep: Publications" }
+              - { name: "process-eyebrow", label: "process-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: How it's made" }
+              - { name: "process-title", label: "process-title", widget: "text", required: false, hint: "Leave empty to keep: The process" }
+              - { name: "process1-title", label: "process1-title", widget: "text", required: false, hint: "Leave empty to keep: Throw" }
+              - { name: "process1-text", label: "process1-text", widget: "text", required: false, hint: "Leave empty to keep: Each piece starts as a ball of clay, centered and pulled up on the wheel." }
+              - { name: "process2-title", label: "process2-title", widget: "text", required: false, hint: "Leave empty to keep: Trim" }
+              - { name: "process2-text", label: "process2-text", widget: "text", required: false, hint: "Leave empty to keep: Once leather-hard, it's flipped and trimmed to carve the foot and refine the shape." }
+              - { name: "process3-title", label: "process3-title", widget: "text", required: false, hint: "Leave empty to keep: Bisque" }
+              - { name: "process3-text", label: "process3-text", widget: "text", required: false, hint: "Leave empty to keep: A first firing turns the clay into porous ceramic, ready for glaze." }
+              - { name: "process4-title", label: "process4-title", widget: "text", required: false, hint: "Leave empty to keep: Glaze & fire" }
+              - { name: "process4-text", label: "process4-text", widget: "text", required: false, hint: "Leave empty to keep: Dipped, layered and fired again to around 2,200\u00b0F, where the glaze melts into glass." }
+              - { name: "payments-eyebrow", label: "payments-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: How to pay" }
+              - { name: "payments-title", label: "payments-title", widget: "text", required: false, hint: "Leave empty to keep: Payments" }
+              - { name: "payments-intro", label: "payments-intro", widget: "text", required: false, hint: "Leave empty to keep: Pay whichever way is easiest for you. You'll choose at checkout." }
+              - { name: "how-eyebrow", label: "how-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: Step by step" }
+              - { name: "how-title", label: "how-title", widget: "text", required: false, hint: "Leave empty to keep: How ordering works" }
+              - { name: "how1-title", label: "how1-title", widget: "text", required: false, hint: "Leave empty to keep: Add to cart" }
+              - { name: "how1-text", label: "how1-text", widget: "text", required: false, hint: "Leave empty to keep: Pick your pieces in the shop and open your cart." }
+              - { name: "how2-title", label: "how2-title", widget: "text", required: false, hint: "Leave empty to keep: Choose how to pay" }
+              - { name: "how2-text", label: "how2-text", widget: "text", required: false, hint: "Leave empty to keep: Card, Venmo, Zelle, or in person. Pick what works for you at checkout." }
+              - { name: "how3-title", label: "how3-title", widget: "text", required: false, hint: "Leave empty to keep: Send payment" }
+              - { name: "how3-text", label: "how3-text", widget: "text", required: false, hint: "Leave empty to keep: Card payments finish right away. For Venmo or Zelle, put your order number in the note." }
+              - { name: "how4-title", label: "how4-title", widget: "text", required: false, hint: "Leave empty to keep: Confirmation" }
+              - { name: "how4-text", label: "how4-text", widget: "text", required: false, hint: "Leave empty to keep: I'll email you once your payment is received to sort out getting your piece to you." }
+              - { name: "questions-title", label: "questions-title", widget: "text", required: false, hint: "Leave empty to keep: Questions or commissions?" }
+              - { name: "questions-text", label: "questions-text", widget: "text", required: false, hint: "Leave empty to keep: Custom pieces, gifts and sets are welcome. Email me with what you have in mind." }
+              - { name: "questions-btn", label: "questions-btn", widget: "text", required: false, hint: "Leave empty to keep: Email Megan" }
+              - { name: "newsletter-eyebrow", label: "newsletter-eyebrow", widget: "text", required: false, hint: "Leave empty to keep: Stay in the loop" }
+              - { name: "newsletter-title", label: "newsletter-title", widget: "text", required: false, hint: "Leave empty to keep: Be first to see new batches" }
+              - { name: "newsletter-text", label: "newsletter-text", widget: "text", required: false, hint: "Leave empty to keep: Get an email when new pieces come out of the kiln. No spam, just pottery." }
+              - { name: "footer-contact", label: "footer-contact", widget: "text", required: false, hint: "Leave empty to keep: Questions or custom orders?" }
+          - { name: "name", label: "Shop name", widget: "string" }
+          - { name: "tagline", label: "Tagline", widget: "text" }
+          - { name: "contactEmail", label: "Contact email", widget: "string" }
+          - { name: "currency", label: "Currency", widget: "hidden", default: "usd" }
+          - { name: "orderFormUrl", label: "Order form link (optional)", widget: "string", required: false, hint: "A Formspree link like https://formspree.io/f/xxxx. Empty = buyers get a pre-written email to send you." }
+          - { name: "newsletterFormUrl", label: "Email-list form link (optional)", widget: "string", required: false, hint: "A Formspree link. Empty = sign-ups open a pre-written email." }
+          - name: "payments"
+            label: "Payment options"
+            widget: "object"
+            collapsed: true
+            fields:
+              - name: "stripe"
+                label: "Card (Stripe)"
+                widget: "object"
+                fields:
+                  - { name: "enabled", label: "Turned on", widget: "boolean", default: true }
+                  - { name: "label", label: "Label", widget: "string" }
+                  - { name: "description", label: "Description", widget: "string" }
+              - name: "venmo"
+                label: "Venmo"
+                widget: "object"
+                fields:
+                  - { name: "enabled", label: "Turned on", widget: "boolean", default: true }
+                  - { name: "label", label: "Label", widget: "string" }
+                  - { name: "username", label: "Venmo username (no @)", widget: "string" }
+              - name: "zelle"
+                label: "Zelle"
+                widget: "object"
+                fields:
+                  - { name: "enabled", label: "Turned on", widget: "boolean", default: true }
+                  - { name: "label", label: "Label", widget: "string" }
+                  - { name: "recipientName", label: "Name on account", widget: "string" }
+                  - { name: "emailOrPhone", label: "Zelle email or phone", widget: "string" }
+              - name: "local"
+                label: "Pay in person"
+                widget: "object"
+                fields:
+                  - { name: "enabled", label: "Turned on", widget: "boolean", default: true }
+                  - { name: "label", label: "Label", widget: "string" }
+                  - { name: "details", label: "Instructions", widget: "text" }
+          - name: "awards"
+            label: "Awards & honors"
+            label_singular: "award"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.year}} {{fields.title}}"
+            fields:
+              - { name: "year", label: "Year", widget: "string" }
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "detail", label: "Detail", widget: "string", required: false }
+          - name: "exhibitions"
+            label: "Exhibitions"
+            label_singular: "exhibition"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.year}} {{fields.title}}"
+            fields:
+              - { name: "year", label: "Year", widget: "string" }
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "venue", label: "Venue", widget: "string", required: false }
+          - name: "publications"
+            label: "Publications"
+            label_singular: "publication"
+            widget: "list"
+            collapsed: true
+            summary: "{{fields.year}} {{fields.title}}"
+            fields:
+              - { name: "year", label: "Year", widget: "string" }
+              - { name: "title", label: "Title", widget: "string" }
+              - { name: "venue", label: "Venue", widget: "string", required: false }
 
       - name: "claysites"
-        label: "🗺️ Clay map places"
+        label: "Clay map places"
         file: "content/clay-sites.json"
         fields:
           - name: "sites"
             label: "Places"
             label_singular: "place"
             widget: "list"
-            summary: "{{fields.name}} ({{fields.county}})"
-            collapsed: true
             add_to_top: true
+            collapsed: true
+            summary: "{{fields.name}} ({{fields.county}})"
             fields:
               - { name: "name", label: "Name", widget: "string" }
               - { name: "county", label: "County", widget: "string" }
@@ -60,16 +210,3 @@ collections:
               - { name: "kind", label: "Type", widget: "select", options: ["region", "restricted"], default: "region" }
               - { name: "access", label: "Access", widget: "select", options: ["unknown", "permitted", "restricted"], default: "unknown" }
               - { name: "notes", label: "Notes", widget: "text" }
-
-      - name: "settings"
-        label: "⚙️ Shop settings"
-        file: "content/shop.json"
-        fields:
-          - { name: "name", label: "Shop name", widget: "string" }
-          - { name: "tagline", label: "Tagline", widget: "string" }
-          - { name: "email", label: "Contact email", widget: "string" }
-          - { name: "instagram", label: "Instagram handle (no @)", widget: "string", required: false }
-          - { name: "venmo", label: "Venmo business username (no @)", widget: "string" }
-          - { name: "pickupArea", label: "Pickup area", widget: "string" }
-          - { name: "pickupNote", label: "Pickup instructions", widget: "text" }
-          - { name: "shippingNote", label: "Shipping info", widget: "text" }

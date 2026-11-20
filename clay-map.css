@@ -1,3 +1,7 @@
+.cm-wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+body { --ink: var(--text); --line: var(--border); --radius: 14px; }
+.cm-footer { color: var(--muted); font-size: .85rem; border-top: 1px solid var(--border); padding: 20px; margin-top: 24px; }
+.map-intro .lede { color: var(--muted); max-width: 60ch; }
 .map-intro { padding: 40px 0 20px; }
 .map-intro h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 0 0 12px; }
 .notice { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent);
@@ -24,8 +28,8 @@
 .pin { width: 18px; height: 18px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 1px 4px rgb(0 0 0 / .5); }
 .pin.region { background: var(--accent); }
 .pin.restricted { background: #b3402a; }
-.leaflet-popup-content { font: 14px/1.5 Inter, sans-serif; color: #2b2622; }
-.leaflet-popup-content h3 { margin: 0 0 4px; font-size: 1rem; }
+.leaflet-popup-content { font: 14px/1.5 "DM Sans", sans-serif; color: #2b2622; }
+.leaflet-popup-content h3 { margin: 0 0 4px; font-size: 1rem; font-family: Fraunces, serif; }
 .tag { display: inline-block; font-size: .72rem; font-weight: 600; padding: 2px 8px; border-radius: 999px;
        background: #eee4d6; margin-bottom: 6px; }
 .tag.restricted { background: #f5d9d2; }
@@ -34,3 +38,4 @@
   #map { height: 70vh; }
   .side { max-height: none; }
 }
+.toggle input { display: inline-block; width: auto; margin: 0 8px 0 0; vertical-align: middle; }

@@ -1,46 +1,44 @@
-# Ceramics Shop
+# Megan Bryla Ceramics
 
-A free static storefront. Buyers pay by card through **Stripe Payment Links** or with **Venmo** for local pickup. You add photos and titles at the **/admin/** page of your site, with no code.
+Portfolio, shop and clay map hosted free on **GitHub Pages** (no server, no monthly cost).
 
+Live at: https://meganbrylaceramics.github.io/MeganBrylaCeramics/
+
+## Updating the site: the admin page
+Go to **/admin/** (or tap the small **©** at the bottom of any page) and sign in with a GitHub token (see below).
+
+- **Add a piece:** *Pieces → Add piece*. Drag in a photo, add a title, and tick **For sale in the Shop** (with a price) and/or **Show in Portfolio**.
+- **Mark sold:** open the piece, tick **Sold out**.
+- **Change wording:** *Website wording* lists every heading and paragraph. Leave a box empty to keep the original.
+- **Shop details, payment options, awards, exhibitions:** same page, further down.
+- **Clay map places:** *Clay map places*.
+
+Click **Publish**. The live site updates in about a minute.
+
+### Signing in
+1. On GitHub: Settings, Developer settings, Personal access tokens, **Fine-grained tokens**, Generate new token.
+2. Limit it to the `MeganBrylaCeramics` repository with **Contents: Read and write**.
+3. Open `/admin/`, choose **Sign in with token**, and paste it. Keep it in a password manager.
+
+## Taking payments (all free to run)
+| Method | What happens |
+|---|---|
+| **Card, Apple Pay, Google Pay** | One **Stripe Payment Link** per piece. Create it in Stripe (Payment Links, New), turn on *Collect shipping address* and *Limit the number of payments to 1*, set the after-payment page to `.../success.html`, and paste the link into that piece in the admin. Pieces without a link can't be paid by card, and the card option only appears once at least one piece has a link. A cart with several pieces shows a pay button per piece. |
+| **Venmo / Zelle / in person** | The buyer places the order and sees payment instructions. |
+
+Use a **Venmo business profile** for sales. Stripe charges about 2.9% + 30¢ per sale and nothing monthly.
+
+### Getting order and email-list notifications
+GitHub Pages has no server, so out of the box a Venmo/Zelle/in-person order **opens a pre-written email** the buyer sends to Megan, and the email-list box does the same. For automatic notifications, create a free form at formspree.io and paste its link into **Order form link** and **Email-list form link** in the admin.
+
+## Files
 ```
 index.html, styles.css, app.js   the site
-content/products.json           your pieces (edited by /admin)
-content/shop.json               shop name, Venmo, email, etc. (edited by /admin)
-images/                         uploaded photos land here
-admin/                          the photo/title editor (Sveltia CMS)
+store.json                       pieces, payments, awards, wording (edited by /admin)
+images/                          photos (new uploads go in images/work/)
+clay-map.html/.js/.css           New York clay map
+content/clay-sites.json          clay map places
+admin/                           the editor (Sveltia CMS)
 ```
 
-## One-time setup (about 20 minutes)
-
-### 1. Put it on GitHub
-Create a free GitHub account and a new repository called `MeganBrylaCeramics`, then upload this folder to it.
-In `admin/config.yml`, change `MeganBrylaCeramics/MeganBrylaCeramics` to your repository.
-
-### 2. Host it free on GitHub Pages
-1. In your repo, go to **Settings → Pages**. Under "Build and deployment", choose **Deploy from a branch**, pick `main` and `/ (root)`, and click Save.
-2. After a minute your shop is live at `https://meganbrylaceramics.github.io/MeganBrylaCeramics/`.
-3. Optional: add a custom domain (about $12/year) in the same Pages settings.
-
-### 2b. Log in to the editor (no extra service needed)
-The editor is Sveltia CMS and it logs in with a GitHub token:
-1. On GitHub go to **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**.
-2. Limit it to the `MeganBrylaCeramics` repository and give it **Contents: Read and write**.
-3. Open `https://meganbrylaceramics.github.io/MeganBrylaCeramics/admin/`, choose **Sign in with token**, and paste it. Keep the token somewhere safe (a password manager).
-
-### 3. Stripe
-1. Create a Stripe account (no monthly fee, about 2.9% + 30¢ per sale).
-2. In **Shipping rates**, add e.g. "Standard shipping, $12" and "Local pickup, $0".
-3. For each piece, go to **Payment Links → New**, add the product, then:
-   - turn on **Collect customers' addresses → Shipping** and attach both shipping rates
-   - under **Advanced**, turn on **Limit the number of payments → 1**, so one-of-a-kind pieces can't sell twice
-4. Paste the link into that piece's **Stripe Payment Link** field in /admin.
-
-### 4. Venmo
-Use a **Venmo business profile**. Personal accounts aren't allowed for selling. Put its username in /admin → Shop settings.
-
-## Adding a new piece
-1. Go to `/admin/` on your site and sign in with your token.
-2. Open **Pieces for sale → Add piece** and drag in a photo. Enter the title, price and description, and paste the Stripe link.
-3. Click **Publish**. The site updates in about a minute.
-
-When something sells by Venmo, tick **Sold** in /admin **and** deactivate its Stripe link.
+Preview on a computer: `python3 -m http.server 8000`, then open http://localhost:8000.

@@ -4,10 +4,10 @@
   const get = (u) => fetch(u, { cache: "no-cache" }).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); });
 
   let SHOP = {}, SITES = [];
-  try { SHOP = await get("content/shop.json"); } catch (e) {}
+  try { SHOP = await get("store.json"); } catch (e) {}
   try { SITES = (await get("content/clay-sites.json")).sites || []; } catch (e) {}
-  if (SHOP.name) { $("#logo").textContent = SHOP.name; document.title = "New York Clay Map | " + SHOP.name; }
-  $("#suggest").href = "mailto:" + (SHOP.email || "") + "?subject=" + encodeURIComponent("Clay map suggestion");
+  if (SHOP.name) document.title = "New York Clay Map | " + SHOP.name;
+  $("#suggest").href = "mailto:" + (SHOP.contactEmail || "") + "?subject=" + encodeURIComponent("Clay map suggestion");
 
   // New York State bounds
   const NY = L.latLngBounds([40.45, -79.8], [45.05, -71.8]);

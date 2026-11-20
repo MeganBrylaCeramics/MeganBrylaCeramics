@@ -1,100 +1,287 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ceramics Shop</title>
-  <meta name="description" content="Handmade ceramics for sale. Shipping or local pickup.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Megan Bryla Ceramics</title>
+  <meta name="description" content="Small-batch, wheel-thrown stoneware by Megan Bryla." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <!-- Text marked data-text="..." can be changed from the admin page (Site text tab).
+       Keep each key the same once the site is live, or Megan's saved wording for it is lost. -->
   <header class="site-header">
-    <div class="wrap header-inner">
-      <a href="#" class="logo" data-shop="name"></a>
-      <nav>
-        <a href="#shop">Shop</a>
-        <a href="clay-map.html">Clay map</a>
-        <a href="#local">Local pickup</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-    </div>
+    <a href="#/" class="wordmark">
+      <span class="wm-name">Megan Bryla</span>
+      <span class="wm-sub">Ceramics</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="#/about" data-nav="about">About</a>
+      <a href="#/portfolio" data-nav="home">Portfolio</a>
+      <a href="#/shop" data-nav="shop">Shop</a>
+      <a href="#/payments" data-nav="payments">Payments</a>
+      <a href="clay-map.html">Clay map</a>
+    </nav>
+    <button class="cart-btn" id="open-cart" aria-label="Open cart">
+      Cart <span class="badge" id="cart-count">0</span>
+    </button>
   </header>
 
-  <main>
-    <section class="hero wrap">
-      <h1 data-shop="tagline"></h1>
-      <p class="hero-sub">Every piece is one of a kind. Order online with card, Apple Pay or Google Pay. If you're local, pick it up and pay with Venmo.</p>
-      <div class="hero-actions">
-        <a class="btn btn-primary" href="#shop">Browse pieces</a>
-        <a class="btn btn-ghost" href="#local">Local pickup</a>
+  <!-- ================= HOME ================= -->
+  <div class="view" data-view="home">
+    <!-- Intro: Megan first -->
+    <section class="intro">
+      <div class="intro-photo">
+        <img src="images/megan-bryla.webp" alt="Megan Bryla, ceramic artist" width="800" height="1158" />
+      </div>
+      <div class="intro-text">
+        <p class="eyebrow" data-text="home-eyebrow">Ceramic artist · Greater Binghamton, NY</p>
+        <h1 data-text="home-title">Hi, I'm <em>Megan Bryla.</em></h1>
+        <p class="lede" data-text="home-intro">I'm a ceramic artist and a Hartwick College graduate with a triple major in Environment, Sustainability &amp; Society, French, and Art. I make wheel-thrown pieces (lidded jars, vases, cups and illustrated vessels) with glazes that run and pool over the throwing lines, bold hand-brushed stripes, and drawings that tell a small story as you turn them in your hands.</p>
+        <div class="btn-row">
+          <a href="#/portfolio" class="btn primary" data-text="home-btn-work">See my work</a>
+          <a href="#/about" class="btn" data-text="home-btn-about">More about me</a>
+        </div>
+        <ul class="intro-facts">
+          <li><strong data-text="home-fact1-title">Hartwick College</strong><span data-text="home-fact1-text">Class of 2026, triple major: Environment, Sustainability &amp; Society, French &amp; Art</span></li>
+          <li><strong data-text="home-fact2-title">Juried shows</strong><span data-text="home-fact2-text">Honored in juried art shows</span></li>
+          <li><strong data-text="home-fact3-title">Commissions</strong><span><span data-text="home-fact3-text">Open to custom work:</span> <a href="#" class="contact-mail" data-text="home-fact3-link">get in touch</a></span></li>
+        </ul>
       </div>
     </section>
 
-    <section id="shop" class="wrap">
-      <div class="section-head">
-        <h2>Shop</h2>
-        <div class="filters" role="group" aria-label="Filter pieces">
-          <button class="chip active" data-filter="available">Available</button>
-          <button class="chip" data-filter="all">All</button>
-          <button class="chip" data-filter="local">Local only</button>
+    <!-- Portfolio: the main event -->
+    <section class="page work" id="work">
+      <div class="section-head split">
+        <div>
+          <p class="eyebrow" data-text="work-eyebrow">Selected work</p>
+          <h2 data-text="work-title">Portfolio</h2>
+        </div>
+        <div class="view-toggle" id="portfolio-view" role="group" aria-label="Sort portfolio">
+          <button type="button" class="active" aria-pressed="true" data-view-mode="type">By type</button>
+          <button type="button" aria-pressed="false" data-view-mode="exhibition">By exhibition</button>
         </div>
       </div>
-      <div id="grid" class="grid"></div>
+      <div class="filters" id="portfolio-filters" role="tablist" aria-label="Filter portfolio"></div>
+      <div id="gallery"></div>
     </section>
 
-    <section id="local" class="wrap local">
+    <!-- Shop teaser -->
+    <section class="page available">
+      <div class="section-head split">
+        <div>
+          <p class="eyebrow" data-text="available-eyebrow">Take a piece home</p>
+          <h2 data-text="available-title">Available now</h2>
+        </div>
+        <a href="#/shop" class="text-link" data-text="available-link">See the whole shop →</a>
+      </div>
+      <div class="grid" id="featured"></div>
+    </section>
+  </div>
+
+  <!-- ================= SHOP ================= -->
+  <div class="view" data-view="shop" hidden>
+    <header class="page-hero">
+      <p class="eyebrow" data-text="shop-eyebrow">The current batch</p>
+      <h1 data-text="shop-title">Shop</h1>
+      <p class="lede"><span data-text="shop-intro">Every piece is one of a kind. When it's gone, it's gone. Pay by card, Venmo, Zelle, or in person.</span> <a href="#/payments" data-text="shop-intro-link">How to pay</a></p>
+    </header>
+    <section class="page">
+      <div class="filters" id="shop-filters" role="tablist" aria-label="Filter shop"></div>
+      <div class="grid" id="products"><p class="muted">Loading…</p></div>
+    </section>
+  </div>
+
+  <!-- ================= ABOUT ================= -->
+  <div class="view" data-view="about" hidden>
+    <section class="about">
+      <div class="about-art"><div class="arch tall has-photo"><img src="images/megan-bryla.webp" alt="Megan Bryla" /></div></div>
+      <div class="about-text">
+        <p class="eyebrow" data-text="about-eyebrow">About the artist</p>
+        <h1 data-text="about-title">Megan Bryla</h1>
+        <p data-text="about-p1">I'm a ceramic artist from the Greater Binghamton area of New York. I graduated from Hartwick College in 2026 with a triple major in Environment, Sustainability &amp; Society, French, and Art, earning Departmental Distinction in all three, and my artwork was honored in juried art shows along the way.</p>
+        <p data-text="about-p2">I throw every piece by hand on the wheel, then trim, glaze and fire it. I love glazes that pool and break over the edges, loose brushed stripes, and speckled clay that shows where it came from. Alongside functional pieces like mugs and tumblers, I make illustrated work: cylinders drawn like comic panels, where everyday moments wrap around the pot.</p>
+        <p data-text="about-p3">When I'm not at the wheel, I work in environmental conservation. As a Watershed Technician with the Upper Susquehanna Coalition, I help restore wetlands and water quality in the Upper Susquehanna River Basin.</p>
+        <p class="signature" data-text="about-signature">— Megan</p>
+        <div class="btn-row">
+          <a href="#/portfolio" class="btn primary" data-text="about-btn-work">See my work</a>
+          <a href="#" class="btn contact-mail" data-text="about-btn-email">Email me</a>
+          <a href="https://www.linkedin.com/in/megan-bryla-780597382/" class="btn" target="_blank" rel="noopener">LinkedIn ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="page highlights">
+      <div class="section-head"><p class="eyebrow" data-text="highlights-eyebrow">Background</p><h2 data-text="highlights-title">Highlights</h2></div>
+      <div class="highlight-grid">
+        <div class="info-card highlight">
+          <p class="eyebrow" data-text="highlight1-label">Education</p>
+          <h3 data-text="highlight1-title">Hartwick College</h3>
+          <p data-text="highlight1-text">Class of 2026. BAs in Studio Arts (Ceramics); Environment, Sustainability &amp; Society; and French.</p>
+        </div>
+        <div class="info-card highlight">
+          <p class="eyebrow" data-text="highlight2-label">Recognition</p>
+          <h3 data-text="highlight2-title">Juried show awards</h3>
+          <p data-text="highlight2-text">Best in Ceramics, Best in Drawing and Juror's Choice in Hartwick's student juried shows.</p>
+        </div>
+        <div class="info-card highlight">
+          <p class="eyebrow" data-text="highlight3-label">Abroad</p>
+          <h3 data-text="highlight3-title">Senegal, Spain &amp; France</h3>
+          <p data-text="highlight3-text">January Term study away, plus French study at the Institut de Touraine in Tours (2025).</p>
+        </div>
+        <div class="info-card highlight">
+          <p class="eyebrow" data-text="highlight4-label">Conservation</p>
+          <h3 data-text="highlight4-title">Watershed Technician</h3>
+          <p data-text="highlight4-text">Upper Susquehanna Coalition: wetland and water-quality restoration.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filled in from store.json (awards, exhibitions, publications) -->
+    <section class="page cv">
+      <div class="cv-block">
+        <h2 class="cv-title" data-text="cv-awards-title">Awards &amp; Honors</h2>
+        <ul class="cv-list" id="cv-awards"></ul>
+      </div>
+      <div class="cv-block">
+        <h2 class="cv-title" data-text="cv-exhibitions-title">Exhibitions</h2>
+        <ul class="cv-list" id="cv-exhibitions"></ul>
+      </div>
+      <div class="cv-block">
+        <h2 class="cv-title" data-text="cv-publications-title">Publications</h2>
+        <ul class="cv-list" id="cv-publications"></ul>
+      </div>
+    </section>
+    <section class="page process">
+      <div class="section-head"><p class="eyebrow" data-text="process-eyebrow">How it's made</p><h2 data-text="process-title">The process</h2></div>
+      <ol class="steps">
+        <li><span>01</span><h3 data-text="process1-title">Throw</h3><p data-text="process1-text">Each piece starts as a ball of clay, centered and pulled up on the wheel.</p></li>
+        <li><span>02</span><h3 data-text="process2-title">Trim</h3><p data-text="process2-text">Once leather-hard, it's flipped and trimmed to carve the foot and refine the shape.</p></li>
+        <li><span>03</span><h3 data-text="process3-title">Bisque</h3><p data-text="process3-text">A first firing turns the clay into porous ceramic, ready for glaze.</p></li>
+        <li><span>04</span><h3 data-text="process4-title">Glaze &amp; fire</h3><p data-text="process4-text">Dipped, layered and fired again to around 2,200°F, where the glaze melts into glass.</p></li>
+      </ol>
+    </section>
+  </div>
+
+  <!-- ================= PAYMENTS ================= -->
+  <div class="view" data-view="payments" hidden>
+    <header class="page-hero">
+      <p class="eyebrow" data-text="payments-eyebrow">How to pay</p>
+      <h1 data-text="payments-title">Payments</h1>
+      <p class="lede" data-text="payments-intro">Pay whichever way is easiest for you. You'll choose at checkout.</p>
+    </header>
+    <section class="page pay-grid" id="pay-methods"></section>
+    <section class="page how">
+      <div class="section-head"><p class="eyebrow" data-text="how-eyebrow">Step by step</p><h2 data-text="how-title">How ordering works</h2></div>
+      <ol class="steps">
+        <li><span>01</span><h3 data-text="how1-title">Add to cart</h3><p data-text="how1-text">Pick your pieces in the shop and open your cart.</p></li>
+        <li><span>02</span><h3 data-text="how2-title">Choose how to pay</h3><p data-text="how2-text">Card, Venmo, Zelle, or in person. Pick what works for you at checkout.</p></li>
+        <li><span>03</span><h3 data-text="how3-title">Send payment</h3><p data-text="how3-text">Card payments finish right away. For Venmo or Zelle, put your order number in the note.</p></li>
+        <li><span>04</span><h3 data-text="how4-title">Confirmation</h3><p data-text="how4-text">I'll email you once your payment is received to sort out getting your piece to you.</p></li>
+      </ol>
+    </section>
+    <section class="page questions">
+      <div class="info-card wide">
+        <div>
+          <h3 data-text="questions-title">Questions or commissions?</h3>
+          <p data-text="questions-text">Custom pieces, gifts and sets are welcome. Email me with what you have in mind.</p>
+        </div>
+        <a class="btn primary" id="contact-btn" href="#" data-text="questions-btn">Email Megan</a>
+      </div>
+    </section>
+  </div>
+
+  <section class="newsletter" aria-labelledby="nl-title">
+    <div class="nl-inner">
       <div>
-        <h2>Local pickup</h2>
-        <p>Near <strong data-shop="pickupArea"></strong>? You can skip shipping.</p>
-        <ol class="steps">
-          <li><strong>Pick a piece</strong> and tap <em>Local pickup</em> on it.</li>
-          <li><strong>Pay with Venmo</strong> (put the piece name in the note) or with a card through checkout.</li>
-          <li><strong>Watch your email.</strong> <span data-shop="pickupNote"></span></li>
-        </ol>
+        <p class="eyebrow" data-text="newsletter-eyebrow">Stay in the loop</p>
+        <h2 id="nl-title" data-text="newsletter-title">Be first to see new batches</h2>
+        <p class="muted" data-text="newsletter-text">Get an email when new pieces come out of the kiln. No spam, just pottery.</p>
       </div>
-      <div class="local-card">
-        <p class="muted">Venmo</p>
-        <p class="venmo-handle">@<span data-shop="venmo"></span></p>
-        <a class="btn btn-venmo" id="venmo-general" target="_blank" rel="noopener">Open Venmo</a>
-        <p class="tiny muted">Use this for local pickup only. Online orders that ship should go through checkout.</p>
-      </div>
-    </section>
+      <form class="nl-form" id="nl-form" novalidate>
+        <label class="sr-only" for="nl-email">Email address</label>
+        <input id="nl-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+        <!-- Hidden from people; bots fill it in -->
+        <input name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true" />
+        <button class="btn primary" type="submit">Sign up</button>
+        <p class="nl-msg" id="nl-msg" role="status" hidden></p>
+      </form>
+    </div>
+  </section>
 
-    <section id="faq" class="wrap faq">
-      <h2>FAQ</h2>
-      <details><summary>How does shipping work?</summary><p data-shop="shippingNote"></p></details>
-      <details><summary>Can two people buy the same piece?</summary><p>No. Each piece is one of a kind, and the checkout link stops working once it sells. For Venmo pickups, I confirm the piece is still available before taking payment.</p></details>
-      <details><summary>Are they food safe?</summary><p>Yes, unless the listing says otherwise. All functional pieces use food-safe glazes and are fired to stoneware temperatures.</p></details>
-      <details><summary>Something arrived broken?</summary><p>Email me a photo within 7 days and I'll replace it or refund you.</p></details>
-    </section>
-  </main>
-
-  <footer class="wrap footer">
-    <p>© <span id="year"></span> <span data-shop="name"></span></p>
-    <p><a id="email-link"></a><span id="ig-wrap"> · <a id="ig-link" target="_blank" rel="noopener"></a></span></p>
+  <footer class="site-footer">
+    <p class="wm-name">Megan Bryla Ceramics</p>
+    <nav class="footer-nav" aria-label="Footer">
+      <a href="#/about">About</a><a href="#/portfolio">Portfolio</a><a href="#/shop">Shop</a><a href="#/payments">Payments</a><a href="clay-map.html">Clay map</a>
+    </nav>
+    <p><span data-text="footer-contact">Questions or custom orders?</span> <a id="contact-link" href="#"></a></p>
+    <!-- The © is a hidden link to the admin page -->
+    <p class="muted small"><a href="admin/" class="secret-link" aria-label="Admin login">©</a> <span id="year"></span> Megan Bryla Ceramics</p>
   </footer>
 
-  <!-- Local pickup dialog -->
-  <dialog id="pickup-dialog">
-    <form method="dialog" class="dialog-inner">
-      <button class="close" aria-label="Close">×</button>
-      <p class="muted tiny">Local pickup</p>
-      <h3 id="pd-name"></h3>
-      <p class="pd-price" id="pd-price"></p>
-      <div class="pd-option">
-        <h4>Option A: Venmo</h4>
-        <p>Pay <strong>@<span data-shop="venmo"></span></strong> and put <strong id="pd-note"></strong> in the note. I'll email you to set up pickup.</p>
-        <a class="btn btn-venmo" id="pd-venmo" target="_blank" rel="noopener">Pay with Venmo</a>
-        <p class="tiny muted">The button opens Venmo with the amount filled in. If it doesn't, search for the handle above in the app.</p>
+  <!-- Portfolio lightbox -->
+  <dialog id="lightbox" class="lightbox">
+    <button type="button" class="icon-btn lb-close" id="lb-close" aria-label="Close">✕</button>
+    <div class="lb-grid">
+      <div class="lb-art" id="lb-art"></div>
+      <div class="lb-text">
+        <p class="eyebrow" id="lb-meta"></p>
+        <h2 id="lb-title"></h2>
+        <p id="lb-desc"></p>
+        <p class="muted small" id="lb-materials"></p>
+        <div class="lb-nav">
+          <button type="button" class="btn small-btn" id="lb-prev">← Prev</button>
+          <button type="button" class="btn small-btn" id="lb-next">Next →</button>
+        </div>
       </div>
-      <div class="pd-option">
-        <h4>Option B: Card</h4>
-        <p>Check out normally and choose <em>Local pickup</em> as the shipping option. Pickup is free.</p>
-        <a class="btn btn-primary" id="pd-stripe" target="_blank" rel="noopener">Pay with card</a>
+    </div>
+  </dialog>
+
+  <!-- Cart drawer -->
+  <div class="scrim" id="scrim" hidden></div>
+  <aside class="drawer" id="cart" aria-label="Cart" aria-hidden="true">
+    <div class="drawer-head">
+      <h2>Your cart</h2>
+      <button class="icon-btn" id="close-cart" aria-label="Close cart">✕</button>
+    </div>
+    <div class="drawer-body" id="cart-items"></div>
+    <div class="drawer-foot">
+      <div class="total-row"><span>Total</span><strong id="cart-total">$0.00</strong></div>
+      <button class="btn primary block" id="checkout-btn" disabled>Checkout</button>
+    </div>
+  </aside>
+
+  <!-- Checkout dialog -->
+  <dialog id="checkout">
+    <form id="checkout-form" method="dialog">
+      <div class="dialog-head">
+        <h2>Checkout</h2>
+        <button type="button" class="icon-btn" id="close-checkout" aria-label="Close">✕</button>
       </div>
-      <p class="tiny muted">Want to make sure it's still available first? <a id="pd-email">Email me</a>.</p>
+
+      <div id="step-details">
+        <fieldset>
+          <legend>How would you like to pay?</legend>
+          <div id="method-list" class="methods"></div>
+        </fieldset>
+
+        <fieldset id="contact-fields">
+          <legend>Your details</legend>
+          <label><span>Name</span> <input name="name" autocomplete="name" /></label>
+          <label><span>Email</span> <input name="email" type="email" autocomplete="email" /></label>
+          <label><span>Phone <span class="muted">(optional)</span></span> <input name="phone" type="tel" autocomplete="tel" /></label>
+          <label><span>Notes <span class="muted">(optional)</span></span> <textarea name="notes" rows="2"></textarea></label>
+        </fieldset>
+
+        <p class="error" id="checkout-error" hidden></p>
+        <div class="total-row"><span>Total</span><strong id="checkout-total"></strong></div>
+        <button type="submit" class="btn primary block" id="place-order">Continue</button>
+      </div>
+
+      <div id="step-done" hidden></div>
     </form>
   </dialog>
 

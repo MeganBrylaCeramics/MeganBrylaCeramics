@@ -5,28 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>New York Clay Map</title>
   <meta name="description" content="A live map of places in New York State associated with natural clay.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="clay-map.css">
 </head>
 <body>
   <header class="site-header">
-    <div class="wrap header-inner">
-      <a href="index.html" class="logo" id="logo">Home</a>
-      <nav>
-        <a href="index.html#shop">Shop</a>
-        <a href="clay-map.html" aria-current="page">Clay map</a>
-        <a href="index.html#local">Local pickup</a>
-      </nav>
-    </div>
+    <a href="index.html#/" class="wordmark">
+      <span class="wm-name">Megan Bryla</span>
+      <span class="wm-sub">Ceramics</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html#/about">About</a>
+      <a href="index.html#/portfolio">Portfolio</a>
+      <a href="index.html#/shop">Shop</a>
+      <a href="index.html#/payments">Payments</a>
+      <a href="clay-map.html" aria-current="page" class="active">Clay map</a>
+    </nav>
   </header>
 
-  <main class="wrap">
+  <main class="cm-wrap">
     <section class="map-intro">
+      <p class="eyebrow">Studio field notes</p>
       <h1>Where to find clay in New York</h1>
-      <p class="hero-sub">A live map of New York State with places linked to natural clay deposits. The base map and geology layers are loaded live from public servers. The markers are my own list.</p>
+      <p class="lede">A live map of New York State with places linked to natural clay deposits. The base map and geology layers are loaded live from public servers. The markers are my own list.</p>
       <p class="notice"><strong>Before you dig:</strong> every spot here is approximate. Most land is private, and parks, preserves and state land usually forbid removing soil or rock. Get the landowner's permission first, and never dig on a bluff or stream bank that could collapse.</p>
     </section>
 
@@ -51,7 +56,7 @@
     </section>
   </main>
 
-  <footer class="wrap footer">
+  <footer class="cm-wrap cm-footer">
     <p>Map data © OpenStreetMap contributors, USGS, Esri.</p>
   </footer>
 
