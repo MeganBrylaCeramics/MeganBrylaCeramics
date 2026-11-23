@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New York Wetland Map</title>
+  <meta name="description" content="New York wetland map: every National Wetlands Inventory wetland, NYS DEC regulated wetlands, hydric soils and streams.">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+    <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="clay-map.css">
+  <link rel="stylesheet" href="wetland-map.css">
+</head>
+<body class="map-page">
+  <header class="site-header">
+    <a href="index.html#/" class="wordmark">
+      <span class="wm-name">Megan Bryla</span>
+      <span class="wm-sub">Ceramics</span>
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="index.html#/about">About</a>
+      <a href="index.html#/portfolio">Portfolio</a>
+      <a href="index.html#/shop" data-shop-nav hidden>Shop</a>
+      <a href="index.html#/payments" data-shop-nav hidden>Payments</a>
+      <a href="clay-map.html">Clay map</a>
+      <a href="wetland-map.html" aria-current="page" class="active">Wetland map</a>
+    </nav>
+  </header>
+
+  <main class="map-app" id="app">
+    <div id="map" role="application" aria-label="Map of New York wetlands"></div>
+
+    <section class="finder fl-card" aria-label="Find a place">
+      <form id="search-form" class="search" autocomplete="off">
+        <input id="search" type="search" placeholder="Search a New York town" aria-label="Search a New York town">
+        <button class="chip" type="submit">Search</button>
+        <button class="chip icon" type="button" id="locate" aria-label="Use my location" title="Use my location">◎</button>
+      </form>
+      <ul id="results" class="results" hidden></ul>
+    </section>
+
+    <div class="zoom-hint" id="zoom-hint"></div>
+
+    <section class="view-card fl-card" id="view-card" aria-live="polite">
+      <div class="vc-head"><strong>In this view</strong><span class="tiny muted" id="vc-note"></span></div>
+      <div class="type-bar" id="type-bar"></div>
+      <div class="vc-stats" id="vc-stats"></div>
+    </section>
+
+    <button type="button" class="panel-toggle fl-card" id="panel-toggle" aria-expanded="true" aria-controls="panel">‹ Layers &amp; info</button>
+
+    <aside class="side fl-card" id="panel">
+      <div class="panel-head">
+        <h1>New York wetland map</h1>
+        <button type="button" class="panel-close" id="panel-close" aria-label="Close panel">✕</button>
+      </div>
+      <p class="intro-text">Every mapped wetland in the state from the National Wetlands Inventory, NYS DEC's state wetland maps, and USDA hydric soils, which show where wetlands are or once were. Tap anywhere to see what's there.</p>
+
+      <details open>
+        <summary>Layers</summary>
+        <label class="toggle"><input type="checkbox" id="lyr-nwi" checked> All wetlands (National Wetlands Inventory) <span class="status" id="nwi-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-dec" checked> NYS DEC previously mapped wetlands <span class="status" id="dec-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-info"> DEC informational wetland mapping <span class="status" id="info-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-hydric"> Hydric soils (USDA) <span class="status" id="hydric-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-streams"> Streams &amp; rivers (USGS) <span class="status" id="streams-status"></span></label>
+        <label class="toggle"><input type="checkbox" id="lyr-counties" checked> County lines</label>
+        <label class="field">Base map
+          <select id="basemap">
+            <option value="topo">Topographic (USGS)</option>
+            <option value="sat">Satellite (Esri)</option>
+            <option value="terrain">Terrain (OpenTopoMap)</option>
+            <option value="osm">Street map (OpenStreetMap)</option>
+          </select>
+        </label>
+        <p class="tiny muted" id="basemap-note"></p>
+        <label class="field">Wetland transparency
+          <input type="range" id="opacity" min="20" max="100" value="80">
+        </label>
+      </details>
+
+      <details open>
+        <summary>Legend</summary>
+        <p class="tiny muted">Wetland types (National Wetlands Inventory)</p>
+        <ul class="nwi-legend" id="nwi-legend"></ul>
+        <ul class="nwi-legend">
+          <li><i class="sw-dec"></i>NYS DEC previously mapped wetland</li>
+          <li><i class="sw-info"></i>DEC informational wetland mapping</li>
+          <li><i class="sw-hydric"></i>Hydric soil (darker = more hydric)</li>
+        </ul>
+      </details>
+
+      <details id="dec-panel">
+        <summary>DEC mapped wetlands in view <span class="count" id="dec-count"></span></summary>
+        <p class="tiny muted">Largest first. Click one to zoom to it.</p>
+        <ul id="dec-list" class="place-list"></ul>
+      </details>
+
+      <details>
+        <summary>Reading wetland codes</summary>
+        <p class="tiny">Each inventory wetland has a code like <code>PFO1E</code>. The first letter is the <b>system</b>, the next two the <b>class</b>, and the last letter the <b>water regime</b>. Tap a wetland and the popup spells it out.</p>
+        <dl class="facts code-key">
+          <dt>P</dt><dd>Palustrine: marshes, swamps, bogs, ponds</dd>
+          <dt>L</dt><dd>Lacustrine: lakes</dd>
+          <dt>R</dt><dd>Riverine: rivers and streams</dd>
+          <dt>E</dt><dd>Estuarine: tidal, brackish water</dd>
+          <dt>EM</dt><dd>Emergent: cattails, sedges, grasses</dd>
+          <dt>SS</dt><dd>Scrub-shrub: alder, willow, dogwood</dd>
+          <dt>FO</dt><dd>Forested: red maple, ash, hemlock swamps</dd>
+          <dt>UB</dt><dd>Open water bottom</dd>
+        </dl>
+      </details>
+
+      <details>
+        <summary>Rules and sources</summary>
+        <p class="tiny">Maps are a guide, not a legal boundary. Since January 1, 2025, NYS DEC protects freshwater wetlands larger than 12.4 acres whether or not they are on its maps (the old maps are now called "previously mapped" wetlands), plus smaller wetlands of unusual importance. The size threshold drops to 7.4 acres in 2028. Work in a protected wetland or the area around it, usually 100 feet, generally needs a permit, so contact DEC first.</p>
+        <ul class="src-list tiny">
+          <li><a href="https://fws.gov/program/national-wetlands-inventory" target="_blank" rel="noopener">U.S. Fish &amp; Wildlife Service: National Wetlands Inventory</a></li>
+          <li><a href="https://dec.ny.gov/nature/waterbodies/wetlands/freshwater-wetlands-program" target="_blank" rel="noopener">NYS DEC: Freshwater Wetlands Program</a></li>
+          <li><a href="https://gisservices.dec.ny.gov/gis/erm/needWetlandsPermit.html" target="_blank" rel="noopener">NYS DEC: Do I need a freshwater wetlands permit?</a></li>
+          <li><a href="https://fws.gov/media/guide-understanding-national-wetlands-inventory-mapping-codes" target="_blank" rel="noopener">Guide to wetland inventory codes (USFWS)</a></li>
+          <li><a href="https://gisservices.dec.ny.gov/gis/erm/" target="_blank" rel="noopener">NYS DEC Environmental Resource Mapper</a></li>
+          <li>USDA NRCS Soil Data Access (hydric soils)</li>
+        </ul>
+      </details>
+      <p class="tiny muted"><a href="clay-map.html">Open the clay soil map →</a></p>
+    </aside>
+  </main>
+
+  <footer class="cm-wrap cm-footer">
+    <p>Wetlands: U.S. Fish &amp; Wildlife Service National Wetlands Inventory; NYS Department of Environmental Conservation. Soils: USDA NRCS Soil Data Access. Streams: USGS. Base maps © USGS, Esri, OpenStreetMap contributors, OpenTopoMap.</p>
+  </footer>
+
+  <script src="vendor/leaflet/leaflet.js"></script>
+  <script src="wetland-map.js"></script>
+</body>
+</html>

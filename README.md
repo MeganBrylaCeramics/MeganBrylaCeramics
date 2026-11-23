@@ -38,6 +38,22 @@ Tap anywhere for that spot's conditions, soil survey, county clay potential and 
 
 The condition ratings and county clay potential are rough guides, not field checks. Never dig without the landowner's permission.
 
+## Wetland map
+`wetland-map.html` is a full-screen New York wetland map:
+
+| Layer | Source |
+|---|---|
+| **Every mapped wetland**, colored by type (zoom 11+) | U.S. Fish & Wildlife Service, National Wetlands Inventory |
+| **NYS DEC previously mapped wetlands** (statewide) and **informational wetland mapping** | NYS Department of Environmental Conservation |
+| **Hydric soils** (zoom 13+) | USDA NRCS Soil Data Access |
+| **Streams & rivers** | USGS |
+
+- An **"In this view"** card counts the wetlands on screen by type.
+- The panel lists the **DEC-mapped wetlands** in view, largest first.
+- **Tap anywhere** to see the wetland type with its inventory code spelled out (for example `PFO1/EM1E`), DEC status and class, and the soil's hydric rating. Hydric soil with no mapped wetland is flagged as a possible former wetland, which is where restoration usually happens.
+
+Maps are a guide, not a legal boundary. Since 2025, NYS DEC protects freshwater wetlands over 12.4 acres whether or not they're mapped (7.4 acres from 2028).
+
 ## Taking payments (all free to run)
 | Method | What happens |
 |---|---|
